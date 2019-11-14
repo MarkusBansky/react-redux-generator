@@ -2,7 +2,10 @@
   "name": "react-redux-generator",
   "version": "0.1.0",
   "description": "A ReactJS REST client generator for projects using AXIOS and REDUX",
-  "main": "index.js",
+  "main": "./bin/index.js",
+  "bin": {
+    "greet": "./bin/index.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build" : "tsc"
