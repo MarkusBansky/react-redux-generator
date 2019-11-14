@@ -1,0 +1,4 @@
+{
+  "input": ["api/example.yaml"],
+  "output": "src/api"
+}

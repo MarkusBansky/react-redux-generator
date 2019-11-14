@@ -1,0 +1,31 @@
+<%var pathI; var methodI; var method; var uniqueVariables = _getUniqueRequestVariables() -%>
+// ==== [GENERATED]
+import {AxiosAction, createActionsObject, createHttpRequest, composeUrlWithParameters, formatUrlWith} from '../utils/utils';
+import {GET, POST, PUT, HEAD, PATCH, DELETE, OPTIONS} from '../utils/constants';
+<% for(var varIndex = 0; varIndex < uniqueVariables.length; ++varIndex) { if (uniqueVariables[varIndex]) {-%>
+import <%=uniqueVariables[varIndex]._type%> from '../models/<%=uniqueVariables[varIndex]._type%>';
+<% }} -%>
+
+// URLs
+<%for(pathI = 0; pathI < _paths.length; ++pathI) {for(methodI = 0; methodI < _paths[pathI].methods.length; ++methodI) { method = _paths[pathI].methods[methodI] -%>
+const api<%=method.name%>URL = '<%=_paths[pathI].path%>';
+<% }} %>
+// Variables for reducers actions
+<%for(pathI = 0; pathI < _paths.length; ++pathI) {for(methodI = 0; methodI < _paths[pathI].methods.length; ++methodI) { method = _paths[pathI].methods[methodI] -%>
+export const api<%=method.name%>Responses = createActionsObject('api<%=method.name%>Responses');
+<%}}%>
+// Paths to endpoint methods
+
+<% for(pathI = 0; pathI < _paths.length; ++pathI) {for(methodI = 0; methodI < _paths[pathI].methods.length; ++methodI) {
+    method = _paths[pathI].methods[methodI] -%>
+export const api<%=method.name%>Action = (<%=method.requestBody%><%-method.parametersTypedString%>redirectTo?: string) =>
+    createHttpRequest(
+        api<%=method.name%>Responses,
+        <%=method.type.toUpperCase()%>,
+        formatUrlWith(api<%=method.name%>URL, <%-method.parametersObjectsString%>),
+        <%=method.requestBody?method.requestBody.name:'undefined'%>,
+        '<%=_name%>',
+        redirectTo
+    );
+
+<% }} %>

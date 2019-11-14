@@ -1,0 +1,50 @@
+import _ from 'lodash';
+import produce from 'immer';
+<% var uniqueVariables = _getUniqueResponseVariables() %>
+import {
+<% for(var pathI = 0; pathI < _paths.length; ++pathI) {
+for(var methodI = 0; methodI < _paths[pathI]._methods.length; ++methodI) { method = _paths[pathI]._methods[methodI] -%>
+    api<%=method._name%>Responses,
+<% }} -%>
+} from '../actions/<%=_name%>Actions';
+
+<% for(var varIndex = 0; varIndex < uniqueVariables.length; ++varIndex) { if (uniqueVariables[varIndex]._type) {-%>
+import <%=uniqueVariables[varIndex]._type%> from '../models/<%=uniqueVariables[varIndex]._type%>';
+<% }} -%>
+
+export interface <%=_reducerName%>State {
+    loading: boolean;
+    errorMessage?: string;
+<% for(varIndex = 0; varIndex < uniqueVariables.length; ++varIndex) { -%>
+    <%=uniqueVariables[varIndex].name%>?: <%=uniqueVariables[varIndex].type ? uniqueVariables[varIndex].type : 'any'%>;
+<% } -%>
+}
+
+const defaultState : <%=_reducerName%>State = {
+    loading: false,
+};
+
+const <%=_reducerName%> = (state = defaultState, action: any) => produce(state, (draft: <%=_reducerName%>State) => {
+    switch (action.type) {
+<% for(pathI = 0; pathI < _paths.length; ++pathI) {
+    for(methodI = 0; methodI < _paths[pathI]._methods.length; ++methodI) {
+        method = _paths[pathI]._methods[methodI]
+%>
+        case api<%=method._name%>Responses.request:
+            draft.loading = true;
+            draft.errorMessage = undefined;
+            break;
+        case api<%=method._name%>Responses.success:
+            draft.loading = false;
+            draft.<%=method.responseBody.name%> = <%=method.responseBody ? `new ${method.responseBody.type}(action.payload.data)` : 'action.payload.data'%>;
+            break;
+        case api<%=method._name%>Responses.failure:
+            draft.errorMessage = action.payload.data.message;
+            draft.<%=method.responseBody.name%> = undefined;
+            draft.loading = false;
+            break;
+<% }} %>
+    }
+});
+
+export default <%=_reducerName%>;
