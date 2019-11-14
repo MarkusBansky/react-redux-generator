@@ -1,0 +1,39 @@
+{
+  "name": "react-redux-generator",
+  "version": "0.1.0",
+  "description": "A ReactJS REST client generator for projects using AXIOS and REDUX",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build" : "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MarkusBansky/react-redux-generator.git"
+  },
+  "keywords": [
+    "react",
+    "axios",
+    "rest",
+    "api",
+    "client",
+    "redux",
+    "generator",
+    "cli",
+    "node"
+  ],
+  "author": "Markiian Benovskyi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MarkusBansky/react-redux-generator/issues"
+  },
+  "homepage": "https://github.com/MarkusBansky/react-redux-generator#readme",
+  "dependencies": {
+    "chalk": "^3.0.0",
+    "listr": "^0.14.3",
+    "lodash": "^4.17.15"
+  },
+  "devDependencies": {
+    "typescript": "^3.7.2"
+  }
+}
