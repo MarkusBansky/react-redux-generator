@@ -10,7 +10,7 @@ Supports only **[Swagger OpenAPI 2.0 standards](https://swagger.io/docs/specific
 To install this package we advice you to use `-g` to be able to use it globally.
 
 ```shell script
-    npm install -g react-redux-api-generator
+$ npm install -g react-redux-api-generator
 ```
 
 ## Configure
