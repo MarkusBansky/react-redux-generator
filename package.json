@@ -1,6 +1,6 @@
 {
   "name": "react-redux-generator",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A ReactJS REST client generator for projects using AXIOS and REDUX",
   "main": "./bin/index.js",
   "bin": {
@@ -8,7 +8,9 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc"
+    "build": "tsc",
+    "clean": "if [ -e \"bin\" ];then rm -rf \"bin\" ; fi  ",
+    "updateLink": "npm run clean && npm run build && npm rm react-redux-generator -g && npm link"
   },
   "repository": {
     "type": "git",
@@ -32,16 +34,22 @@
   },
   "homepage": "https://github.com/MarkusBansky/react-redux-generator#readme",
   "dependencies": {
-    "@types/boxen": "^3.0.1",
-    "@types/chalk": "^2.2.0",
-    "@types/listr": "^0.14.2",
-    "@types/lodash": "^4.14.147",
     "boxen": "^4.1.0",
     "chalk": "^3.0.0",
+    "ejs": "^2.7.2",
+    "jsonfile": "^5.0.0",
     "listr": "^0.14.3",
-    "lodash": "^4.17.15"
+    "lodash": "^4.17.15",
+    "rxjs": "^6.5.3",
+    "swagger-parser": "^8.0.3"
   },
   "devDependencies": {
+    "@types/boxen": "^3.0.1",
+    "@types/chalk": "^2.2.0",
+    "@types/ejs": "^2.6.3",
+    "@types/jsonfile": "^5.0.0",
+    "@types/listr": "^0.14.2",
+    "@types/lodash": "^4.14.147",
     "typescript": "^3.7.2"
   }
 }

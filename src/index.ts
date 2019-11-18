@@ -1,11 +1,16 @@
 #!/usr/bin/env node
 
-import * as chalk from 'chalk';
-import * as boxen from 'boxen';
+import chalk from 'chalk';
+import boxen from 'boxen';
+import {WORKING_DIRECTORY} from "./constants";
+import ReactReduxGenerator from "./reactReduxGenerator";
 const log = console.log;
 
 // Log greeting
-const greetingMessage = chalk.red('R') + 'eact ' + chalk.green('R') + 'edux ' + chalk.blue('G') + 'enerator';
+const greetingMessage =
+    `${chalk.red('R')}eact ${chalk.green('R')}edux ${chalk.blue('G')}enerator\n`;
 log(boxen(greetingMessage, {padding: 1, margin: 1, borderStyle: 'double' as any}));
+log('Working directory: ' + chalk.cyan(WORKING_DIRECTORY));
 
 // Create the generator class instance:
+new ReactReduxGenerator();
