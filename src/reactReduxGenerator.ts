@@ -101,14 +101,18 @@ export default class ReactReduxGenerator {
     generateUtilityFiles = (reject) => {
         try {
             let pathToOutputFolder = path.resolve(this._pathToApiBuildFolder, 'utils');
-            let pathToTemplate = path.resolve(__dirname, '../src/templates/utils.ejs');
+            let pathToUtilsTemplate = path.resolve(__dirname, '../src/templates/utils.ejs');
+            let pathToConstantsTemplate = path.resolve(__dirname, '../src/templates/constants.ejs');
 
             if (!fs.existsSync(pathToOutputFolder)) {
                 fs.mkdirSync(pathToOutputFolder, {recursive: true});
             }
 
-            let renderedTemplate = ejs.render(fs.readFileSync(pathToTemplate, 'utf8'));
-            fs.writeFileSync(path.resolve(pathToOutputFolder, 'utils.ts'), renderedTemplate);
+            let renderedUtilsTemplate = ejs.render(fs.readFileSync(pathToUtilsTemplate, 'utf8'));
+            fs.writeFileSync(path.resolve(pathToOutputFolder, 'utils.ts'), renderedUtilsTemplate);
+
+            let renderedConstantsTemplate = ejs.render(fs.readFileSync(pathToConstantsTemplate, 'utf8'));
+            fs.writeFileSync(path.resolve(pathToOutputFolder, 'constants.ts'), renderedConstantsTemplate);
         } catch (e) {
             reject(e);
         }

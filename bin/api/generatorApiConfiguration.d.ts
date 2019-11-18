@@ -1,8 +1,10 @@
 export default class GeneratorApiConfiguration {
+    private _name;
     private readonly _pathToDefinition;
     private readonly _pathToOutputFolder;
     private _serverUrl;
     private _models;
+    private _paths;
     constructor(pathToDefinition: string, pathToBuild: string);
     getName(): string;
     private createApiStructure;

@@ -11,7 +11,7 @@ export interface AxiosAction {
  * used to create new request parameter type easily for axios and redux usage.
  * @param name The general name of this parameter.
  */
-export function getActionsObject(
+export function createActionsObject(
     name: string
 ): AxiosAction {
     return {
