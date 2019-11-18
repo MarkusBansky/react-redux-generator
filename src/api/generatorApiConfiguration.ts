@@ -44,6 +44,7 @@ export default class GeneratorApiConfiguration {
 
             // Create paths from API object
             this._paths = _.entries(api.paths).map(def => {
+                console.log(def);
                 return new GeneratorApiPath(def[0], def[1]);
             });
         } catch (e) {

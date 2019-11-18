@@ -31,6 +31,7 @@ class GeneratorApiConfiguration {
                 });
                 // Create paths from API object
                 this._paths = lodash_1.default.entries(api.paths).map(def => {
+                    console.log(def);
                     return new generatorApiPath_1.default(def[0], def[1]);
                 });
             }
