@@ -17,6 +17,4 @@ $ npm install -g react-redux-api-generator
 
 Create a file called `rrg-config.json` in your project's root directory next to your `package.json`.
 
-To find out what configurations are possible visit the [Config Wiki]() page.
-
-## Write API
+To find out what configurations are possible visit the [Config Wiki](https://github.com/MarkusBansky/react-redux-generator/wiki/Configuration-file) page.
