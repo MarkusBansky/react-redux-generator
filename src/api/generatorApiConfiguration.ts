@@ -1,10 +1,10 @@
-import * as ejs from 'ejs';
 import _ from 'lodash';
-import * as path from "path";
 import SwaggerParser from "swagger-parser";
 import GeneratorApiModel from "./generatorApiModel";
 import GeneratorApiPath from "./generatorApiPath";
 
+const ejs = require('ejs');
+const path = require('path');
 const fs = require('fs');
 
 export default class GeneratorApiConfiguration {
