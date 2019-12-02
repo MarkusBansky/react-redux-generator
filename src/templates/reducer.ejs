@@ -1,0 +1,42 @@
+import _ from 'lodash';
+import produce from 'immer';
+
+export interface <%=reducerName%>ReducerState {
+    loading: boolean;
+    errorMessage?: string;
+<% for(pathI = 0; pathI < _paths.length; ++pathI) {
+for(methodI = 0; methodI < _paths[pathI]._methods.length; ++methodI) {
+    method = _paths[pathI]._methods[methodI]
+%>
+<!--    <%=method._resultVariableName%>?: -->
+<% }} %>
+}
+
+const defaultState : <%=reducerName%>ReducerState = {
+    loading: false;
+};
+
+const <%=reducerName%>Reducer = (state = defaultState, action: any) => produce(state, (draft: <%=reducerName%>ReducerState) => {
+    switch (action.type) {
+<% for(pathI = 0; pathI < _paths.length; ++pathI) {
+    for(methodI = 0; methodI < _paths[pathI]._methods.length; ++methodI) {
+        method = _paths[pathI]._methods[methodI]
+%>
+        case api<%=method._type%><%=method._name%>Responses.request:
+            draft.loading = true;
+            draft.errorMessage = undefined;
+            break;
+        case api<%=method._type%><%=method._name%>Responses.success:
+            draft.loading = false;
+            draft.<%=method._resultVariableName%> = action.payload.data;
+            break;
+        case api<%=method._type%><%=method._name%>Responses.failure:
+            draft.errorMessage = action.payload.data.message;
+            draft.<%=method._resultVariableName%> = undefined;
+            draft.loading = false;
+            break;
+<% }} %>
+    }
+};
+
+export default <%=reducerName%>Reducer;

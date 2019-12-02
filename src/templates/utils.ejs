@@ -2,9 +2,9 @@
  * Defines request parameter type.
  */
 export interface AxiosAction {
-    REQUEST: string;
-    SUCCESS: string;
-    FAILURE: string;
+    request: string;
+    success: string;
+    failure: string;
 }
 
 /**
@@ -15,9 +15,9 @@ export function createActionsObject(
     name: string
 ): AxiosAction {
     return {
-        REQUEST: name.toUpperCase() + '_REQUEST',
-        SUCCESS: name.toUpperCase() + '_SUCCESS',
-        FAILURE: name.toUpperCase() + '_FAILURE',
+        request: name.toUpperCase() + '_REQUEST',
+        success: name.toUpperCase() + '_SUCCESS',
+        failure: name.toUpperCase() + '_FAILURE',
     }
 }
 
@@ -39,7 +39,7 @@ export function createHttpRequest(
     redirectTo?: string
 ) {
     return {
-        types: [a.REQUEST, a.SUCCESS, a.FAILURE],
+        types: [a.request, a.success, a.failure],
         payload: {
             redirectTo: redirectTo,
             client: client ? client : 'default',

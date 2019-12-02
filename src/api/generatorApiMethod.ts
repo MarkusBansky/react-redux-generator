@@ -8,6 +8,7 @@ export default class GeneratorApiMethod {
     private _type: string;
     private _consumes: string;
     private _produces: string;
+    private _resultVariableName: string;
 
     private _requestBody?: RequestBody;
     private _pathParameters: RequestParameter[];
@@ -17,6 +18,7 @@ export default class GeneratorApiMethod {
         this._type = toFirstUpperLetter(name);
         this._consumes = data.consumes && data.consumes[0];
         this._produces = data.produces && data.produces[0];
+        this._resultVariableName = data.responses['200'].description;
         this._pathParameters = [];
 
         _.forEach(data.parameters, param => {
