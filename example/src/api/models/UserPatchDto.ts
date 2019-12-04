@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 export default class UserPatchDto {
     
-    private _id: integer;
+    private _id: number;
     
     private _first_name: string;
     
@@ -66,7 +66,7 @@ export default class UserPatchDto {
         }
     }
     
-    get id(): integer {
+    get id(): number {
         return this._id;
     }
     
@@ -103,7 +103,7 @@ export default class UserPatchDto {
     }
     
     
-    set id(value: integer) {
+    set id(value: number) {
         this._id = value; 
     }
     

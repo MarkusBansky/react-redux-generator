@@ -1,3 +1,5 @@
+import {GET, POST, PUT, HEAD, PATCH, DELETE, OPTIONS} from './constants';
+
 /**
  * Defines request parameter type.
  */
@@ -32,7 +34,7 @@ export function createActionsObject(
  */
 export function createHttpRequest(
     a: AxiosAction,
-    method: 'GET' | 'POST' | 'DELETE' | 'PUT',
+    method: GET | POST | PUT | HEAD | PATCH | DELETE | OPTIONS,
     url: string,
     data: any,
     client?: 'default' | 'v2' | 'nlp_v1' | 'tf',

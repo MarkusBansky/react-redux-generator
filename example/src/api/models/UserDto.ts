@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 export default class UserDto {
     
-    private _id: integer;
+    private _id: number;
     
     private _username: string;
     
@@ -78,7 +78,7 @@ export default class UserDto {
         }
     }
     
-    get id(): integer {
+    get id(): number {
         return this._id;
     }
     
@@ -123,7 +123,7 @@ export default class UserDto {
     }
     
     
-    set id(value: integer) {
+    set id(value: number) {
         this._id = value; 
     }
     

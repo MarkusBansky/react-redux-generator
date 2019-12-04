@@ -1,0 +1,31 @@
+export default class UserPatchDto {
+    private _id;
+    private _first_name;
+    private _middle_name;
+    private _last_name;
+    private _country_code;
+    private _address_line_1;
+    private _address_line_2;
+    private _post_code;
+    private _mobile_phone;
+    constructor(data: any);
+    toJSON(): any;
+    get id(): number;
+    get first_name(): string;
+    get middle_name(): string;
+    get last_name(): string;
+    get country_code(): string;
+    get address_line_1(): string;
+    get address_line_2(): string;
+    get post_code(): string;
+    get mobile_phone(): string;
+    set id(value: number);
+    set first_name(value: string);
+    set middle_name(value: string);
+    set last_name(value: string);
+    set country_code(value: string);
+    set address_line_1(value: string);
+    set address_line_2(value: string);
+    set post_code(value: string);
+    set mobile_phone(value: string);
+}

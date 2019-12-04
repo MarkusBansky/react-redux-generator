@@ -1,44 +1,44 @@
 // ==== [GENERATED]
-import {AxiosAction, createActionsObject, createHttpRequest, composeUrlWithParameters} from '../utils/utils.ts';
-import {API, GET, POST, PUT, UPDATE, DELETE} from '../utils/constants.ts';
+import {AxiosAction, createActionsObject, createHttpRequest, composeUrlWithParameters} from '../utils/utils';
+import {GET, POST, PUT, HEAD, PATCH, DELETE, OPTIONS} from '../utils/constants';
 
 // URLs
 
-const apiPostTry to register a new user if such username and meail does not exist.URL = '/users';
+const apiPostRegisterUserURL = '/users';
 
-const apiGetReturns user by it&#39;s id if such user exists in the database.URL = '/users/{id}';
+const apiGetGetUserByIdURL = '/users/{id}';
 
-const apiPatchPartially update user personal record information.URL = '/users/{id}';
+const apiPatchUpdateUserURL = '/users/{id}';
 
-const apiGetTry to validate user session with the token from cookies or header.URL = '/sessions';
+const apiGetValidateSessionURL = '/sessions';
 
-const apiPostSend user details to log into the session and return a valid session token.URL = '/sessions';
+const apiPostAuthenticateSessionURL = '/sessions';
 
 // Variables for reducers actions
 
-export const apiPostTry to register a new user if such username and meail does not exist.Responses = createActionsObject('apiPostTry to register a new user if such username and meail does not exist.Responses');
+export const apiPostRegisterUserResponses = createActionsObject('apiPostRegisterUserResponses');
 
-export const apiGetReturns user by it&#39;s id if such user exists in the database.Responses = createActionsObject('apiGetReturns user by it&#39;s id if such user exists in the database.Responses');
+export const apiGetGetUserByIdResponses = createActionsObject('apiGetGetUserByIdResponses');
 
-export const apiPatchPartially update user personal record information.Responses = createActionsObject('apiPatchPartially update user personal record information.Responses');
+export const apiPatchUpdateUserResponses = createActionsObject('apiPatchUpdateUserResponses');
 
-export const apiGetTry to validate user session with the token from cookies or header.Responses = createActionsObject('apiGetTry to validate user session with the token from cookies or header.Responses');
+export const apiGetValidateSessionResponses = createActionsObject('apiGetValidateSessionResponses');
 
-export const apiPostSend user details to log into the session and return a valid session token.Responses = createActionsObject('apiPostSend user details to log into the session and return a valid session token.Responses');
+export const apiPostAuthenticateSessionResponses = createActionsObject('apiPostAuthenticateSessionResponses');
 
 // Paths to endpoint methods
 
-export default const apiPostTry to register a new user if such username and meail does not exist.Action = (callback?: any) =>
-    createHttpRequest(apiPostTry to register a new user if such username and meail does not exist.Responses, POST, apiPostTry to register a new user if such username and meail does not exist.URL, null, callback);
+export const apiPostRegisterUserAction = (callback?: any) =>
+    createHttpRequest(apiPostRegisterUserResponses, POST, apiPostRegisterUserURL, null, callback);
 
-export default const apiGetReturns user by it&#39;s id if such user exists in the database.Action = (callback?: any) =>
-    createHttpRequest(apiGetReturns user by it&#39;s id if such user exists in the database.Responses, GET, apiGetReturns user by it&#39;s id if such user exists in the database.URL, null, callback);
+export const apiGetGetUserByIdAction = (callback?: any) =>
+    createHttpRequest(apiGetGetUserByIdResponses, GET, apiGetGetUserByIdURL, null, callback);
 
-export default const apiPatchPartially update user personal record information.Action = (callback?: any) =>
-    createHttpRequest(apiPatchPartially update user personal record information.Responses, PATCH, apiPatchPartially update user personal record information.URL, null, callback);
+export const apiPatchUpdateUserAction = (callback?: any) =>
+    createHttpRequest(apiPatchUpdateUserResponses, PATCH, apiPatchUpdateUserURL, null, callback);
 
-export default const apiGetTry to validate user session with the token from cookies or header.Action = (callback?: any) =>
-    createHttpRequest(apiGetTry to validate user session with the token from cookies or header.Responses, GET, apiGetTry to validate user session with the token from cookies or header.URL, null, callback);
+export const apiGetValidateSessionAction = (callback?: any) =>
+    createHttpRequest(apiGetValidateSessionResponses, GET, apiGetValidateSessionURL, null, callback);
 
-export default const apiPostSend user details to log into the session and return a valid session token.Action = (callback?: any) =>
-    createHttpRequest(apiPostSend user details to log into the session and return a valid session token.Responses, POST, apiPostSend user details to log into the session and return a valid session token.URL, null, callback);
+export const apiPostAuthenticateSessionAction = (callback?: any) =>
+    createHttpRequest(apiPostAuthenticateSessionResponses, POST, apiPostAuthenticateSessionURL, null, callback);

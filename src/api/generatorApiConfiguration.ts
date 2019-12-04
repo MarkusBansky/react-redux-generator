@@ -149,10 +149,10 @@ export default class GeneratorApiConfiguration {
             fs.writeFileSync(path.resolve(pathToActions, this._name + 'Actions.ts'), actionsRenderedTemplate);
 
             // Render the reducer file
-            // let reducerRenderedTemplate = ejs.render(
-                // fs.readFileSync(pathToReducerTemplate, 'utf8'), this);
+            let reducerRenderedTemplate = ejs.render(
+                fs.readFileSync(pathToReducerTemplate, 'utf8'), this);
             // Save the rendered reducer file into the folder
-            // fs.writeFileSync(path.resolve(pathToReducers, this._name + 'Reducer.ts'), reducerRenderedTemplate);
+            fs.writeFileSync(path.resolve(pathToReducers, this._name + 'Reducer.ts'), reducerRenderedTemplate);
         } catch (e) {
             reject(e);
         }

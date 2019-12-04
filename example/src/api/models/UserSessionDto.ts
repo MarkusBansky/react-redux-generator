@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 export default class UserSessionDto {
     
-    private _user_id: integer;
+    private _user_id: number;
     
     private _token: string;
     
@@ -30,7 +30,7 @@ export default class UserSessionDto {
         }
     }
     
-    get user_id(): integer {
+    get user_id(): number {
         return this._user_id;
     }
     
@@ -43,7 +43,7 @@ export default class UserSessionDto {
     }
     
     
-    set user_id(value: integer) {
+    set user_id(value: number) {
         this._user_id = value; 
     }
     

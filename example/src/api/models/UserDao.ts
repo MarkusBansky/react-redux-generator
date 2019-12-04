@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 export default class UserDao {
     
-    private _id: integer;
+    private _id: number;
     
     private _username: string;
     
@@ -26,9 +26,9 @@ export default class UserDao {
     
     private _mobile_phone: string;
     
-    private _created_at: string;
+    private _created_at: Date;
     
-    private _updated_at: string;
+    private _updated_at: Date;
     
     constructor(data: any) {
 
@@ -96,7 +96,7 @@ export default class UserDao {
         }
     }
     
-    get id(): integer {
+    get id(): number {
         return this._id;
     }
     
@@ -144,16 +144,16 @@ export default class UserDao {
         return this._mobile_phone;
     }
     
-    get created_at(): string {
+    get created_at(): Date {
         return this._created_at;
     }
     
-    get updated_at(): string {
+    get updated_at(): Date {
         return this._updated_at;
     }
     
     
-    set id(value: integer) {
+    set id(value: number) {
         this._id = value; 
     }
     
@@ -201,11 +201,11 @@ export default class UserDao {
         this._mobile_phone = value; 
     }
     
-    set created_at(value: string) {
+    set created_at(value: Date) {
         this._created_at = value; 
     }
     
-    set updated_at(value: string) {
+    set updated_at(value: Date) {
         this._updated_at = value; 
     }
     

@@ -15,7 +15,7 @@ export default class ModelProperty {
                 this._type = 'number';
                 break;
             case 'string':
-                if(data.items.format && data.items.format === 'date-time') {
+                if(data.format && data.format === 'date-time') {
                     this._type = 'Date';
                     break;
                 }

@@ -2,13 +2,13 @@ import _ from 'lodash';
 
 export default class UserSessionDao {
     
-    private _session_id: integer;
+    private _session_id: number;
     
     private _user: object;
     
     private _jwt_token: string;
     
-    private _expiration_time: string;
+    private _expiration_time: Date;
     
     constructor(data: any) {
 
@@ -36,7 +36,7 @@ export default class UserSessionDao {
         }
     }
     
-    get session_id(): integer {
+    get session_id(): number {
         return this._session_id;
     }
     
@@ -48,12 +48,12 @@ export default class UserSessionDao {
         return this._jwt_token;
     }
     
-    get expiration_time(): string {
+    get expiration_time(): Date {
         return this._expiration_time;
     }
     
     
-    set session_id(value: integer) {
+    set session_id(value: number) {
         this._session_id = value; 
     }
     
@@ -65,7 +65,7 @@ export default class UserSessionDao {
         this._jwt_token = value; 
     }
     
-    set expiration_time(value: string) {
+    set expiration_time(value: Date) {
         this._expiration_time = value; 
     }
     
