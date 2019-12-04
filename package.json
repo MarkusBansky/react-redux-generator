@@ -1,8 +1,8 @@
 {
   "name": "react-redux-generator",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A ReactJS REST client generator for projects using AXIOS and REDUX",
-  "main": "./bin/index.js",
+  "main": "./dist/react-redux-api-generator.js",
   "bin": {
     "generate-axios-api": "./dist/react-redux-api-generator.js"
   },
@@ -34,6 +34,7 @@
   },
   "homepage": "https://github.com/MarkusBansky/react-redux-generator#readme",
   "dependencies": {
+    "chalk": "^3.0.0",
     "ejs": "^2.7.2",
     "listr": "^0.14.3",
     "lodash": "^4.17.15",

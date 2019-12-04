@@ -53,10 +53,11 @@ export default class ReactReduxGenerator {
      * Try to read the configuration file if it exists, then set all global variables to be equal to values extracted
      * from the config file. If it does not exist then system would use default values.
      */
-    readConfig = () => new Promise((resolve, reject) => {
+    readConfig = () => new Promise((resolve, _) => {
         try {
             // Try to read the file in the config path
-            const config: {[key: string]: any} = require(CONFIG_PATH);
+            const rawFileData = fs.readFileSync(CONFIG_PATH);
+            const config: {[key: string]: any} = JSON.parse(rawFileData);
 
             // Read definition directory
             if (config.definitionDir) {
@@ -73,7 +74,7 @@ export default class ReactReduxGenerator {
             console.log('\t Path to build folder: ' + this._pathToApiBuildFolder);
             resolve('Successfully loaded configuration file');
         } catch (e) {
-            reject(e);
+            resolve('Configuration file not found, using default values or the ones from command line');
         }
     });
 
@@ -117,14 +118,13 @@ export default class ReactReduxGenerator {
      * For each of the API generators, runs the create sequence to go through all the data in the API definition and
      * create a code structure in memory of this API construction.
      */
-    createAPICodeStructure = () => new Promise((resolve, reject) => {
-        try {
-            _.forEach(this._generators, generator => generator.create());
-            resolve();
-        } catch (e) {
-            reject(e);
-        }
-    });
+    createAPICodeStructure = () =>
+        new Listr(
+            _.map(this._generators, generator => ({
+                title: generator.getFileName(),
+                task: () => new Promise((resolve, reject) => generator.createApiStructure(resolve, reject))
+            }))
+        );
 
     /**
      * Generate all utility files that are going to be used by other files in generated code.
@@ -135,11 +135,11 @@ export default class ReactReduxGenerator {
     generateUtilityFiles = () => new Promise((resolve, reject) => {
         try {
             // Define paths to files
-            let pathToOutputFolder = path.resolve(this._pathToApiBuildFolder, 'utils');
-            let pathToUtilsTemplate = path.resolve(__dirname, '../src/templates/utils.ejs');
-            let pathToConstantsTemplate = path.resolve(__dirname, '../src/templates/constants.ejs');
-            let pathToUtilsOutput = path.resolve(pathToOutputFolder, 'utils.ts');
-            let pathToConstantsOutput = path.resolve(pathToOutputFolder, 'constants.ts');
+            let pathToOutputFolder = path.join(this._pathToApiBuildFolder, 'utils');
+            let pathToUtilsTemplate = path.join(__dirname, '../src/templates/utils.ejs');
+            let pathToConstantsTemplate = path.join(__dirname, '../src/templates/constants.ejs');
+            let pathToUtilsOutput = path.join(pathToOutputFolder, 'utils.ts');
+            let pathToConstantsOutput = path.join(pathToOutputFolder, 'constants.ts');
 
             // Create the utils directory if it does not exist
             if (!fs.existsSync(pathToOutputFolder)) {
@@ -167,7 +167,10 @@ export default class ReactReduxGenerator {
      */
     generateAPIFiles = () => new Promise((resolve, reject) => {
         try {
-            _.forEach(this._generators, generator => generator.generate());
+            this._generators = _.map(this._generators, generator => {
+                generator.generateApiOutputs(resolve, reject);
+                return generator;
+            });
             resolve();
         } catch (e) {
             reject(e);

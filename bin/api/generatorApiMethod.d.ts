@@ -5,6 +5,7 @@ export default class GeneratorApiMethod {
     private _type;
     private _consumes;
     private _produces;
+    private _resultVariableName;
     private _requestBody?;
     private _pathParameters;
     constructor(name: string, data: any);

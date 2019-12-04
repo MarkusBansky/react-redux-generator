@@ -4,7 +4,7 @@ const nodeExternals = require('webpack-node-externals');
 
 module.exports = {
     mode: 'production',
-    entry: './src/index.ts',
+    entry: path.resolve(__dirname, 'src/index.ts'),
     target: 'node',
     externals: [nodeExternals()],
     module: {
@@ -13,15 +13,15 @@ module.exports = {
                 test: /\.tsx?$/,
                 use: 'ts-loader',
                 exclude: /node_modules/,
-            },
-        ],
+            }
+        ]
     },
     resolve: {
         extensions: ['.tsx', '.ts', '.js'],
     },
     output: {
         filename: 'react-redux-api-generator.js',
-        path: path.resolve(__dirname, 'dist'),
+        path: path.join(__dirname, 'dist'),
     },
     plugins: [
         new webpack.BannerPlugin({
@@ -29,6 +29,7 @@ module.exports = {
         })
     ],
     node: {
-        fs: 'empty'
+        fs: 'empty',
+        __dirname: false,
     }
 };

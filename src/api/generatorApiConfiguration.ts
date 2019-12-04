@@ -1,7 +1,9 @@
 import _ from 'lodash';
+import chalk from 'chalk';
 import SwaggerParser from "swagger-parser";
 import GeneratorApiModel from "./generatorApiModel";
 import GeneratorApiPath from "./generatorApiPath";
+import {checkIfObjectIsEmpty} from "../utils";
 
 // Used for file template generation
 const ejs = require('ejs');
@@ -71,24 +73,33 @@ export default class GeneratorApiConfiguration {
      * @param resolve Function called when method finishes successfully.
      * @param reject Function called when error occurs.
      */
-    private createApiStructure = async (resolve, reject) => {
+    public createApiStructure = async (resolve, reject) => {
         try {
             const api: any = await SwaggerParser.validate(this._pathToDefinition);
 
             // Set all required models and create the structure of the API inside the code
-            this._serverUrl = api.host + api.basePath;
-            this._name = api.info.title;
+            this._serverUrl = api.servers[0].url;
+            this._name = api.info.title.replace(' ', '_').toLowerCase();
 
             // Create models for API
-            this._models = _.entries(api.definitions).map(def => {
+            this._models = _.entries(api.components.schemas).map(def => {
+                console.log(chalk.bgCyan(def[0]));
+                console.log(def[1]);
                 return new GeneratorApiModel(def[0], def[1]);
             });
 
             // Create paths from API object
             this._paths = _.entries(api.paths).map(def => {
-                console.log(def);
+                console.log(chalk.bgMagenta(def[0]));
+                console.log(def[1]);
                 return new GeneratorApiPath(def[0], def[1]);
             });
+
+            checkIfObjectIsEmpty('Models', this._models);
+            checkIfObjectIsEmpty('Endpoints', this._paths);
+
+            console.log(chalk.bgGreen('this'));
+            console.log(this);
         } catch (e) {
             reject(e);
         }
@@ -102,14 +113,17 @@ export default class GeneratorApiConfiguration {
      * @param resolve Function called when method finishes successfully.
      * @param reject Function called when error occurs.
      */
-    private generateApiOutputs = (resolve, reject) => {
+    public generateApiOutputs = (resolve, reject) => {
         try {
-            let pathToActionsTemplate = path.resolve(__dirname, '../../src/templates/actions.ejs');
-            let pathToModelsTemplate = path.resolve(__dirname, '../../src/templates/model.ejs');
-            let pathToReducerTemplate = path.resolve(__dirname, '../../src/templates/reducer.ejs');
+            let pathToActionsTemplate = path.resolve(__dirname, '../src/templates/actions.ejs');
+            let pathToModelsTemplate = path.resolve(__dirname, '../src/templates/model.ejs');
+            let pathToReducerTemplate = path.resolve(__dirname, '../src/templates/reducer.ejs');
             let pathToModels = path.resolve(this._pathToOutputFolder, 'models');
             let pathToActions = path.resolve(this._pathToOutputFolder, 'actions');
             let pathToReducers = path.resolve(this._pathToOutputFolder, 'reducers');
+
+            checkIfObjectIsEmpty('Models', this._models);
+            checkIfObjectIsEmpty('Endpoints', this._paths);
 
             // Generate MODELS for every schema input in the api
             _.forEach(this._models, (model, index, arr) => {
@@ -129,34 +143,20 @@ export default class GeneratorApiConfiguration {
             }
 
             // Render the output file
-            let renderedTemplate = ejs.render(
+            let actionsRenderedTemplate = ejs.render(
                 fs.readFileSync(pathToActionsTemplate, 'utf8'), {_paths: this._paths});
             // Save the rendered actions file into the folder
-            fs.writeFileSync(path.resolve(pathToActions, this._name + 'Actions.ts'), renderedTemplate);
+            fs.writeFileSync(path.resolve(pathToActions, this._name + 'Actions.ts'), actionsRenderedTemplate);
 
             // Render the reducer file
-            let reducerTemplate = ejs.render(
-                fs.readFileSync(pathToReducerTemplate, 'utf8'), this);
+            // let reducerRenderedTemplate = ejs.render(
+                // fs.readFileSync(pathToReducerTemplate, 'utf8'), this);
             // Save the rendered reducer file into the folder
-            fs.writeFileSync(path.resolve(pathToReducers, this._name + 'Reducer.ts'), renderedTemplate);
+            // fs.writeFileSync(path.resolve(pathToReducers, this._name + 'Reducer.ts'), reducerRenderedTemplate);
         } catch (e) {
             reject(e);
         }
 
         resolve();
     };
-
-    /**
-     * Creates this API with all required files.
-     */
-    public create(): Promise<any> {
-        return new Promise(this.createApiStructure);
-    }
-
-    /**
-     * Generate API files in the output directory.
-     */
-    public generate(): Promise<any> {
-        return new Promise(this.generateApiOutputs);
-    }
 }

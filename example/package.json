@@ -1,0 +1,12 @@
+{
+  "name": "example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "generate-axios-api"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

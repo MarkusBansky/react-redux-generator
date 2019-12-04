@@ -1,3 +1,4 @@
+import Listr from 'listr';
 /**
  * Main file used to generate API structure from Swagger definition.
  */
@@ -34,7 +35,7 @@ export default class ReactReduxGenerator {
      * For each of the API generators, runs the create sequence to go through all the data in the API definition and
      * create a code structure in memory of this API construction.
      */
-    createAPICodeStructure: () => Promise<unknown>;
+    createAPICodeStructure: () => Listr<any>;
     /**
      * Generate all utility files that are going to be used by other files in generated code.
      * These are always stable templates, and contain sample constants and general utility functions.
