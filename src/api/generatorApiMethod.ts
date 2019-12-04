@@ -14,7 +14,7 @@ export default class GeneratorApiMethod {
     private _pathParameters: RequestParameter[];
 
     constructor(name: string, data: any) {
-        this._name = data.description;
+        this._name = data.operationId;
         this._type = toFirstUpperLetter(name);
         this._consumes = data.consumes && data.consumes[0];
         this._produces = data.produces && data.produces[0];
