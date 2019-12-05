@@ -1,14 +1,17 @@
 import _ from 'lodash';
-import {toFirstUpperLetter} from "../utils";
+import {getSchemaNameFromResponse, toFirstUpperLetter} from "../utils";
 import RequestBody from "../interfaces/requestBody";
 import RequestParameter from "../interfaces/requestParameter";
+import chalk from "chalk";
 
 export default class GeneratorApiMethod {
     private _name: string;
     private _type: string;
     private _consumes: string;
     private _produces: string;
-    private _resultVariableName: string;
+
+    private _resultVariableName?: string;
+    private _resultVariableType?: string;
 
     private _requestBody?: RequestBody;
     private _pathParameters: RequestParameter[];
@@ -18,8 +21,15 @@ export default class GeneratorApiMethod {
         this._type = toFirstUpperLetter(name);
         this._consumes = data.consumes && data.consumes[0];
         this._produces = data.produces && data.produces[0];
-        this._resultVariableName = data.responses['200'].description;
         this._pathParameters = [];
+
+        let varName = getSchemaNameFromResponse(data.responses['200'])
+            .replace(/([Dd]to|[Dd]ao)/g, '');
+        this._resultVariableName = varName[0].toLowerCase() + varName.slice(1);
+        this._resultVariableType = getSchemaNameFromResponse(data.responses['200']);
+
+        console.log(chalk.redBright('Method response object:'));
+        console.log(data.responses['200'].content['application/json']);
 
         _.forEach(data.parameters, param => {
             if (param.in === 'body') {
@@ -68,5 +78,29 @@ export default class GeneratorApiMethod {
 
     set pathParameters(value: RequestParameter[]) {
         this._pathParameters = value;
+    }
+
+    get type(): string {
+        return this._type;
+    }
+
+    set type(value: string) {
+        this._type = value;
+    }
+
+    get resultVariableName(): string {
+        return this._resultVariableName;
+    }
+
+    set resultVariableName(value: string) {
+        this._resultVariableName = value;
+    }
+
+    get resultVariableType(): string {
+        return this._resultVariableType;
+    }
+
+    set resultVariableType(value: string) {
+        this._resultVariableType = value;
     }
 }

@@ -21,10 +21,7 @@ export default class ReactReduxGenerator {
      * from the config file. If it does not exist then system would use default values.
      */
     readConfig: () => Promise<unknown>;
-    /**
-     * Reads the input directory defined in settings. Then reads the list of files it is containing. If the directory
-     * does not contain any files in it, then reject the promise.
-     */
+    clearOutputDirectory: () => Promise<unknown>;
     readInputDirectory: () => Promise<unknown>;
     /**
      * For each API file in the input folder, create a new API generator configuration class object with input path

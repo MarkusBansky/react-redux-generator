@@ -3,7 +3,8 @@ import chalk from 'chalk';
 import SwaggerParser from "swagger-parser";
 import GeneratorApiModel from "./generatorApiModel";
 import GeneratorApiPath from "./generatorApiPath";
-import {checkIfObjectIsEmpty} from "../utils";
+import {checkIfObjectIsEmpty, sentenceToCamelCase} from "../utils";
+import GeneratorApiMethod from "./generatorApiMethod";
 
 // Used for file template generation
 const ejs = require('ejs');
@@ -21,6 +22,11 @@ export default class GeneratorApiConfiguration {
      * Name of API from swagger definition.
      */
     private _name: string;
+
+    /**
+     * Name of reducer, that is the combination of the original name and a word 'Reducer'.
+     */
+    private _reducerName: string;
 
     /**
      * Path to swagger definition file.
@@ -59,6 +65,14 @@ export default class GeneratorApiConfiguration {
         this._paths = [];
     }
 
+    private _getUniqueMethodVariables(): { name: string, type: string }[] {
+        return _.uniqBy(_.flatMapDeep(this._paths, path => _.map(path.methods, (method: GeneratorApiMethod) => {
+            if (method.resultVariableName) {
+                return { name: method.resultVariableName, type: method.resultVariableType };
+            }
+        })), 'name');
+    }
+
     /**
      * Used to retrieve the name of the definition file. Is used to create a reducer and add a new axios client
      * whether it is required.
@@ -75,11 +89,12 @@ export default class GeneratorApiConfiguration {
      */
     public createApiStructure = async (resolve, reject) => {
         try {
-            const api: any = await SwaggerParser.validate(this._pathToDefinition);
+            const api: any = await SwaggerParser.parse(this._pathToDefinition);
 
             // Set all required models and create the structure of the API inside the code
             this._serverUrl = api.servers[0].url;
-            this._name = api.info.title.replace(' ', '_').toLowerCase();
+            this._name = sentenceToCamelCase(api.info.title);
+            this._reducerName = this._name + 'Reducer';
 
             // Create models for API
             this._models = _.entries(api.components.schemas).map(def => {
@@ -144,9 +159,15 @@ export default class GeneratorApiConfiguration {
 
             // Render the output file
             let actionsRenderedTemplate = ejs.render(
-                fs.readFileSync(pathToActionsTemplate, 'utf8'), {_paths: this._paths});
+                fs.readFileSync(pathToActionsTemplate, 'utf8'), this);
             // Save the rendered actions file into the folder
             fs.writeFileSync(path.resolve(pathToActions, this._name + 'Actions.ts'), actionsRenderedTemplate);
+
+            // Generate reducer for this configuration file
+            // First if the reducers folder does not exist, create one.
+            if (!fs.existsSync(pathToReducers)) {
+                fs.mkdirSync(pathToReducers, {recursive: true});
+            }
 
             // Render the reducer file
             let reducerRenderedTemplate = ejs.render(

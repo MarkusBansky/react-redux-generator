@@ -9,6 +9,10 @@ export default class GeneratorApiConfiguration {
      */
     private _name;
     /**
+     * Name of reducer, that is the combination of the original name and a word 'Reducer'.
+     */
+    private _reducerName;
+    /**
      * Path to swagger definition file.
      */
     private readonly _pathToDefinition;
@@ -32,6 +36,7 @@ export default class GeneratorApiConfiguration {
      */
     private _paths;
     constructor(pathToDefinition: string, pathToBuild: string);
+    private _getUniqueMethodVariables;
     /**
      * Used to retrieve the name of the definition file. Is used to create a reducer and add a new axios client
      * whether it is required.

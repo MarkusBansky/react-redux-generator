@@ -4,7 +4,7 @@ export default class UserSessionDao {
     
     private _session_id: number;
     
-    private _user: object;
+    private _user: ;
     
     private _jwt_token: string;
     
@@ -40,7 +40,7 @@ export default class UserSessionDao {
         return this._session_id;
     }
     
-    get user(): object {
+    get user():  {
         return this._user;
     }
     
@@ -57,7 +57,7 @@ export default class UserSessionDao {
         this._session_id = value; 
     }
     
-    set user(value: object) {
+    set user(value: ) {
         this._user = value; 
     }
     

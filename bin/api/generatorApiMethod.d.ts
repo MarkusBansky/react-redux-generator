@@ -5,7 +5,8 @@ export default class GeneratorApiMethod {
     private _type;
     private _consumes;
     private _produces;
-    private _resultVariableName;
+    private _resultVariableName?;
+    private _resultVariableType?;
     private _requestBody?;
     private _pathParameters;
     constructor(name: string, data: any);
@@ -19,4 +20,10 @@ export default class GeneratorApiMethod {
     set requestBody(value: RequestBody);
     get pathParameters(): RequestParameter[];
     set pathParameters(value: RequestParameter[]);
+    get type(): string;
+    set type(value: string);
+    get resultVariableName(): string;
+    set resultVariableName(value: string);
+    get resultVariableType(): string;
+    set resultVariableType(value: string);
 }

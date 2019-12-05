@@ -2,6 +2,7 @@ import _ from 'lodash';
 import Listr from 'listr';
 import {CONFIG_PATH, WORKING_DIRECTORY} from "./constants";
 import GeneratorApiConfiguration from "./api/generatorApiConfiguration";
+import {removeDirectory} from "./utils";
 
 const ejs = require('ejs');
 const path = require('path');
@@ -37,6 +38,7 @@ export default class ReactReduxGenerator {
         const tasks = new Listr([
             {title: 'Read RRG configuration file', task: this.readConfig},
             {title: 'Load API definition files', task: this.readInputDirectory},
+            {title: 'Clear output directory', task: this.clearOutputDirectory},
             {title: 'Create generator controllers', task: this.createGeneratorsFromAPIFiles},
             {title: 'Create API structure', task: this.createAPICodeStructure},
             {title: 'Generate general utility files', task: this.generateUtilityFiles},
@@ -78,7 +80,19 @@ export default class ReactReduxGenerator {
         }
     });
 
-    /**
+    /*
+     * Used to delete everything in the output directory to regenerate the files for the API.
+     */
+    clearOutputDirectory = () => new Promise((resolve, reject) => {
+        try {
+            removeDirectory(this._pathToApiBuildFolder);
+            resolve("Done");
+        } catch (e) {
+            reject(e);
+        }
+    });
+
+    /*
      * Reads the input directory defined in settings. Then reads the list of files it is containing. If the directory
      * does not contain any files in it, then reject the promise.
      */

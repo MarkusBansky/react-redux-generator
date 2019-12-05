@@ -1,22 +1,39 @@
 import _ from 'lodash';
 import produce from 'immer';
 
-export interface <%=reducerName%>ReducerState {
-    loading: boolean;
-    errorMessage?: string;
+<% var uniqueVariables = _getUniqueMethodVariables() %>
+
+import {
 <% for(pathI = 0; pathI < _paths.length; ++pathI) {
 for(methodI = 0; methodI < _paths[pathI]._methods.length; ++methodI) {
     method = _paths[pathI]._methods[methodI]
 %>
-<!--    <%=method._resultVariableName%>?: -->
+    api<%=method._type%><%=method._name%>Responses,
 <% }} %>
+} from '../actions/<%=_name%>Actions';
+
+<% for(varIndex = 0; varIndex < uniqueVariables.length; ++varIndex) { if (uniqueVariables[varIndex].type) {%>
+import <%=uniqueVariables[varIndex].type%> from '../models/<%=uniqueVariables[varIndex].type%>';
+<% }} %>
+
+
+export interface <%=_reducerName%>State {
+
+    loading: boolean;
+
+    errorMessage?: string;
+<% for(varIndex = 0; varIndex < uniqueVariables.length; ++varIndex) {%>
+    <%=uniqueVariables[varIndex].name%>?: <%=uniqueVariables[varIndex].type ? uniqueVariables[varIndex].type : 'any'%>;
+<% } %>
 }
 
-const defaultState : <%=reducerName%>ReducerState = {
-    loading: false;
+
+const defaultState : <%=_reducerName%>State = {
+    loading: false,
 };
 
-const <%=reducerName%>Reducer = (state = defaultState, action: any) => produce(state, (draft: <%=reducerName%>ReducerState) => {
+
+const <%=_reducerName%> = (state = defaultState, action: any) => produce(state, (draft: <%=_reducerName%>State) => {
     switch (action.type) {
 <% for(pathI = 0; pathI < _paths.length; ++pathI) {
     for(methodI = 0; methodI < _paths[pathI]._methods.length; ++methodI) {
@@ -28,7 +45,7 @@ const <%=reducerName%>Reducer = (state = defaultState, action: any) => produce(s
             break;
         case api<%=method._type%><%=method._name%>Responses.success:
             draft.loading = false;
-            draft.<%=method._resultVariableName%> = action.payload.data;
+            draft.<%=method._resultVariableName%> = <%=method._resultVariableType ? `new ${method._resultVariableType}(action.payload.data)` : 'action.payload.data'%>;
             break;
         case api<%=method._type%><%=method._name%>Responses.failure:
             draft.errorMessage = action.payload.data.message;
@@ -37,6 +54,6 @@ const <%=reducerName%>Reducer = (state = defaultState, action: any) => produce(s
             break;
 <% }} %>
     }
-};
+});
 
-export default <%=reducerName%>Reducer;
+export default <%=_reducerName%>;
