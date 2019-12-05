@@ -1,21 +1,41 @@
 import axios from 'axios';
-import {applyMiddleware, combineReducers, createStore} from 'redux';
 import {IClientsList, multiClientMiddleware} from 'redux-axios-middleware';
 
 // Import all reducers
 // Each reducer is imported from a separate file
-
+<%for(generatorIndex = 0; generatorIndex < _generators.length; ++generatorIndex) { var generator = _generators[generatorIndex]%>
+import <%=generator._reducerName%> from './reducers/<%=generator._reducerName%>';
+<% } %>
 
 // Create an axios client for each api server
+<%for(generatorIndex = 0; generatorIndex < _generators.length; ++generatorIndex) { var generator = _generators[generatorIndex]%>
+const <%=generator._name%>AxiosClient = axios.create({
+    baseURL: '<%=generator._serverUrl%>',
+    responseType: 'json',
+    headers: {
+        'content-type': 'application/json'
+    }
+});
+<% } %>
 
 
 // Create axios client list
-
+const axiosClients: IClientsList = {
+    default: { client: <%=_generators[0]._name%>AxiosClient },
+<%for(generatorIndex = 0; generatorIndex < _generators.length; ++generatorIndex) { var generator = _generators[generatorIndex]%>
+    <%=generator._name%>: { client: <%=generator._name%>AxiosClient },
+<% } %>
+};
 
 // Export multi client middleware
 // Add this into your middleware combination
-
+export const axiosMiddleware: any = multiClientMiddleware(axiosClients);
 
 // Export client reducers as and object
 // Use these in your code as on this example:
 // combineReducers({ ...axiosReducers, /**...other reducers**/ });
+export const axiosReducers: any = {
+<%for(generatorIndex = 0; generatorIndex < _generators.length; ++generatorIndex) { var generator = _generators[generatorIndex]%>
+    <%=generator._reducerName%>,
+<% } %>
+};

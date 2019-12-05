@@ -28,7 +28,7 @@ export default class GeneratorApiMethod {
         this._resultVariableName = varName[0].toLowerCase() + varName.slice(1);
         this._resultVariableType = getSchemaNameFromResponse(data.responses['200']);
 
-        console.log(chalk.redBright('Method response object:'));
+        console.log(chalk.cyanBright('Method response object:'));
         console.log(data.responses['200'].content['application/json']);
 
         _.forEach(data.parameters, param => {

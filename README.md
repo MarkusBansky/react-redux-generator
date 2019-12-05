@@ -5,6 +5,7 @@
 
 [![Build Status](https://travis-ci.org/MarkusBansky/react-redux-generator.svg?branch=master)](https://travis-ci.org/MarkusBansky/react-redux-generator)
 ![](https://github.com/MarkusBansky/react-redux-generator/workflows/Node%20CI/badge.svg)
+[![Percentage of issues still open](http://isitmaintained.com/badge/open/MarkusBansky/react-redux-generator.svg)](http://isitmaintained.com/project/MarkusBansky/react-redux-generator "Percentage of issues still open")
 
 Currently supports api specification only in **[OpenAPI 3.0](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md)**.
 

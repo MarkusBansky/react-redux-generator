@@ -46,4 +46,10 @@ export default class ReactReduxGenerator {
      * from the request and then processes it and passes to the view.
      */
     generateAPIFiles: () => Promise<unknown>;
+    /**
+     * Run to generate final middleware file specification for this api definition. This creates a single file
+     * with constants for each api definition. It includes all reducers, creates all axios clients and
+     * exports variables to be included in the state creation later in the user code.
+     */
+    generateMiddleware: () => Promise<unknown>;
 }

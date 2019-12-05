@@ -42,7 +42,8 @@ export default class ReactReduxGenerator {
             {title: 'Create generator controllers', task: this.createGeneratorsFromAPIFiles},
             {title: 'Create API structure', task: this.createAPICodeStructure},
             {title: 'Generate general utility files', task: this.generateUtilityFiles},
-            {title: 'Generate API', task: this.generateAPIFiles}
+            {title: 'Generate API', task: this.generateAPIFiles},
+            {title: 'Generate middleware file', task: this.generateMiddleware}
         ]);
 
         // Run tasks with error catching
@@ -185,6 +186,28 @@ export default class ReactReduxGenerator {
                 generator.generateApiOutputs(resolve, reject);
                 return generator;
             });
+            resolve();
+        } catch (e) {
+            reject(e);
+        }
+    });
+
+    /**
+     * Run to generate final middleware file specification for this api definition. This creates a single file
+     * with constants for each api definition. It includes all reducers, creates all axios clients and
+     * exports variables to be included in the state creation later in the user code.
+     */
+    generateMiddleware = () => new Promise((resolve, reject) => {
+        try {
+            let pathToMiddlewareTemplate = path.resolve(__dirname, '../src/templates/axiosMiddleware.ejs');
+            let pathToMiddleware = path.resolve(this._pathToApiBuildFolder);
+
+            // Render the middleware file
+            let middlewareRenderedTemplate = ejs.render(
+                fs.readFileSync(pathToMiddlewareTemplate, 'utf8'), this);
+            // Save the rendered reducer file into the folder
+            fs.writeFileSync(path.resolve(pathToMiddleware, 'axiosApiMiddleware.ts'), middlewareRenderedTemplate);
+
             resolve();
         } catch (e) {
             reject(e);
