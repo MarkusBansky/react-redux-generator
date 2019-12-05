@@ -5,21 +5,21 @@ import {GET, POST, PUT, HEAD, PATCH, DELETE, OPTIONS} from '../utils/constants';
 // URLs
 <%for(pathI = 0; pathI < _paths.length; ++pathI) {for(methodI = 0; methodI < _paths[pathI]._methods.length; ++methodI) {
     method = _paths[pathI]._methods[methodI]%>
-const api<%=method._type%><%=method._name%>URL = '<%=_paths[pathI]._path%>';
+const api<%=method._name%>URL = '<%=_paths[pathI]._path%>';
 <% }} %>
 // Variables for reducers actions
 <%for(pathI = 0; pathI < _paths.length; ++pathI) {for(methodI = 0; methodI < _paths[pathI]._methods.length; ++methodI) {
     method = _paths[pathI]._methods[methodI]%>
-export const api<%=method._type%><%=method._name%>Responses = createActionsObject('api<%=method._type%><%=method._name%>Responses');
+export const api<%=method._name%>Responses = createActionsObject('api<%=method._name%>Responses');
 <%}}%>
 // Paths to endpoint methods
 <% for(pathI = 0; pathI < _paths.length; ++pathI) {for(methodI = 0; methodI < _paths[pathI]._methods.length; ++methodI) {
     method = _paths[pathI]._methods[methodI]%>
-export const api<%=method._type%><%=method._name%>Action = (<%=method._requestBody?'data: '+method._requestBody._name+', ':''%>redirectTo?: string) =>
+export const api<%=method._name%>Action = (<%=method._requestBody?'data: '+method._requestBody._name+', ':''%>redirectTo?: string) =>
     createHttpRequest(
-        api<%=method._type%><%=method._name%>Responses,
+        api<%=method._name%>Responses,
         <%=method._type.toUpperCase()%>,
-        api<%=method._type%><%=method._name%>URL,
+        api<%=method._name%>URL,
         <%=method._requestBody?'data':'null'%>,
         '<%=_name%>',
         redirectTo

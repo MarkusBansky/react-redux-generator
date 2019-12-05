@@ -6,4 +6,4 @@ export declare const sentenceToCamelCase: (sentence: string) => string;
  * @param {string} dir_path
  */
 export declare function removeDirectory(dir_path: any): void;
-export declare function getSchemaNameFromResponse(response: any): any;
+export declare function getSchemaNameFromResponse(response: any): string;
