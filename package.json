@@ -42,8 +42,12 @@
   },
   "devDependencies": {
     "@types/ejs": "^2.6.3",
+    "@types/jest": "^24.0.23",
     "@types/listr": "^0.14.2",
     "@types/lodash": "^4.14.147",
+    "@types/node": "^12.12.14",
+    "jest": "^24.9.0",
+    "ts-jest": "^24.2.0",
     "ts-loader": "^6.2.1",
     "typescript": "^3.7.2",
     "webpack": "^4.41.2",
