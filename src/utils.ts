@@ -2,11 +2,11 @@ import chalk from "chalk";
 import * as fs from "fs";
 import * as path from "path";
 
-export const toFirstUpperLetter = (text: string) => {
+export const toFirstUpperLetter = (text: string): string => {
     return text[0].toUpperCase().concat(text.slice(1));
 };
 
-export const checkIfObjectIsEmpty = (name: string, element?: any) => {
+export const checkIfObjectIsEmpty = (name: string, element?: any): void => {
     let date = new Date();
     if (element === undefined || element === null) {
         console.log(name + ' empty: ' + chalk.redBright(true) + ' - ' + date + ' ' + date.getMilliseconds() + 'ms');
@@ -18,7 +18,7 @@ export const checkIfObjectIsEmpty = (name: string, element?: any) => {
     console.log(name + ' not empty: ' + chalk.greenBright(false) + ' - ' + date + ' ' + date.getMilliseconds() + 'ms');
 };
 
-export const sentenceToCamelCase = (sentence: string) => {
+export const sentenceToCamelCase = (sentence: string): string => {
     let words = sentence.replace(/[^a-zA-Z\s!?]/g,'').split(' ');
     let capitalizedTitle = words.map(w => toFirstUpperLetter(w)).join('');
     return capitalizedTitle[0].toLowerCase() + capitalizedTitle.slice(1);
@@ -28,7 +28,7 @@ export const sentenceToCamelCase = (sentence: string) => {
  * Remove directory recursively
  * @param {string} dir_path
  */
-export function removeDirectory(dir_path) {
+export function removeDirectory(dir_path): void {
     if (fs.existsSync(dir_path)) {
         fs.readdirSync(dir_path).forEach(function(entry) {
             const entry_path = path.join(dir_path, entry);
@@ -42,7 +42,7 @@ export function removeDirectory(dir_path) {
     }
 }
 
-export function getSchemaNameFromResponse(response: any) {
+export function getSchemaNameFromResponse(response: any): string {
     try {
         return response.content['application/json'].schema['$ref'].split('/').reverse()[0];
     } catch {

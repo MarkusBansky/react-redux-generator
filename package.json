@@ -13,7 +13,7 @@
     "generate-axios-api": "./dist/react-redux-api-generator.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --coverage",
     "build": "webpack --config webpack.config.js",
     "clean": "if [ -e \"bin\" ];then rm -rf \"bin\" ; fi  ",
     "updateLink": "npm run clean && npm run build && npm rm react-redux-generator -g && npm link"
