@@ -1,8 +1,14 @@
 {
-  "name": "react-redux-generator",
-  "version": "0.1.1",
-  "description": "A ReactJS REST client generator for projects using AXIOS and REDUX",
-  "main": "./bin/index.js",
+  "name": "react-redux-api-generator",
+  "version": "0.1.0",
+  "description": "This plugin generates react-ready typescript classes and functions for REST API communication. All you need to have is an OpenAPI 3.0 definition file.",
+  "author": "Markiian Benovskyi",
+  "license": "LGPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/MarkusBansky/react-redux-generator/issues"
+  },
+  "homepage": "https://github.com/MarkusBansky/react-redux-generator#readme",
+  "main": "./dist/react-redux-api-generator.js",
   "bin": {
     "generate-axios-api": "./dist/react-redux-api-generator.js"
   },
@@ -27,13 +33,8 @@
     "cli",
     "node"
   ],
-  "author": "Markiian Benovskyi",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/MarkusBansky/react-redux-generator/issues"
-  },
-  "homepage": "https://github.com/MarkusBansky/react-redux-generator#readme",
   "dependencies": {
+    "chalk": "^3.0.0",
     "ejs": "^2.7.2",
     "listr": "^0.14.3",
     "lodash": "^4.17.15",

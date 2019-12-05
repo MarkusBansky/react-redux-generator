@@ -1,0 +1,315 @@
+openapi: 3.0.0
+info:
+  title: Yggdrasill Authentication Service API
+  description: This is universal API definition for Yggdrasill Service project.
+  version: 0.1.0
+servers:
+  - url: http://localhost:8081
+    description: Development environment
+
+# URL requests
+paths:
+  /users:
+    post:
+      operationId: registerUser
+      summary: Registers a new user
+      description: Try to register a new user if such username and meail does not exist.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDao'
+      responses:
+        '200':
+          description: In case off success returns user object that is saved into the database.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto'
+
+  /users/{id}:
+    get:
+      operationId: getUserById
+      summary: Returns a user for specific id
+      description: Returns user by it's id if such user exists in the database.
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+          description: The user ID
+      responses:
+        '200':
+          description: A user dto object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    patch:
+      operationId: updateUser
+      summary: Update information about this user
+      description: Partially update user personal record information.
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+          description: The user ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserPatchDto'
+      responses:
+        '200':
+          description: In case user has been updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /sessions:
+    get:
+      operationId: validateSession
+      summary: Validate user token
+      description: Try to validate user session with the token from cookies or header.
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: In case the session token is valid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionStatusDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    post:
+      operationId: authenticateSession
+      summary: Authenticate user session
+      description: Send user details to log into the session and return a valid session token.
+      responses:
+        '200':
+          description: In case the session token is valid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSessionDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+# MODELS
+components:
+#  Responses
+  responses:
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SessionStatusDto'
+
+#  Security
+  securitySchemes:
+    ApiKeyAuth:        # arbitrary name for the security scheme
+      type: apiKey
+      in: header       # can be "header", "query" or "cookie"
+      name: X-API-KEY  # name of the header, query parameter or cookie
+
+# Models
+  schemas:
+    # Users
+    UserDao:
+      type: object
+      description: Data model used to store and get data from the database.
+      required:
+        - username
+        - password_hash
+        - first_name
+        - last_name
+        - email
+        - country_code
+        - address_line_1
+        - post_code
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: User ID
+        username:
+          type: string
+          description: User nickname
+        password_hash:
+          type: string
+          description: Hash of user password
+        first_name:
+          type: string
+          description: First name
+        middle_name:
+          type: string
+          description: Middle name
+        last_name:
+          type: string
+          description: Last name
+        email:
+          type: string
+          description: User's email
+        country_code:
+          type: string
+          description: ISO code of the country
+        address_line_1:
+          type: string
+          description: First line of address
+        address_line_2:
+          type: string
+        post_code:
+          type: string
+          description: Post code of the user
+        mobile_phone:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    UserDto:
+      type: object
+      description:
+        User object used to be returned from REST endpoint on a request. Contains only
+        certain fields that can be exposed to the consumer.
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: User ID
+        username:
+          type: string
+          description: User nickname
+        first_name:
+          type: string
+          description: First name
+        middle_name:
+          type: string
+          description: Middle name
+        last_name:
+          type: string
+          description: Last name
+        email:
+          type: string
+          description: User's email
+        country_code:
+          type: string
+          description: ISO code of the country
+        address_line_1:
+          type: string
+          description: First line of address
+        address_line_2:
+          type: string
+        post_code:
+          type: string
+          description: Post code of the user
+        mobile_phone:
+          type: string
+
+    UserPatchDto:
+      type: object
+      description:
+        User object to be used to update some information in the users record.
+      required:
+        - id
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: User ID
+        first_name:
+          type: string
+          description: First name
+        middle_name:
+          type: string
+          description: Middle name
+        last_name:
+          type: string
+          description: Last name
+        country_code:
+          type: string
+          description: ISO code of the country
+        address_line_1:
+          type: string
+          description: First line of address
+        address_line_2:
+          type: string
+        post_code:
+          type: string
+          description: Post code of the user
+        mobile_phone:
+          type: string
+
+    UserSessionDao:
+      type: object
+      description: Data model used to store and get data from the database.
+      required:
+        - user
+        - jwt_token
+        - expiration_time
+      properties:
+        session_id:
+          type: integer
+          format: int64
+        user:
+          $ref: '#/components/schemas/UserDao'
+        jwt_token:
+          type: string
+        expiration_time:
+          type: string
+          format: date-time
+
+    UserSessionDto:
+      type: object
+      description:
+        Object used to return data about user session from REST endpoint call.
+      properties:
+        user_id:
+          type: integer
+          format: int64
+          description: ID of user for which this session object is created for.
+        token:
+          type: string
+          description: User token used as API authentication key in requests.
+        expiration_date:
+          type: string
+          format: data-time
+          description: Exact date and time when this token is considered to be expired and cannot be longer used.
+
+    SessionStatusDto:
+      type: object
+      description:
+        Identifies user session as a valid object, returns info and the expiry time. If session is invalid
+        then return negative result.
+      properties:
+        message:
+          type: string
+          description: Message description of the session validation result.
+        valid:
+          type: boolean
+          description: Identifies wether the session is valid.
