@@ -19,6 +19,10 @@ export default class RequestBody {
         console.log(this);
     }
 
+    public toString(): string {
+        return `${this._name}${this._required ? '' : '?'}: ${this._type}, `;
+    }
+
     get name(): string {
         return this._name;
     }

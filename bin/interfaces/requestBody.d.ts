@@ -4,6 +4,7 @@ export default class RequestBody {
     private _required;
     private _description?;
     constructor(responseBody: any);
+    toString(): string;
     get name(): string;
     set name(value: string);
     get schema(): string;

@@ -5,6 +5,8 @@ import GeneratorApiModel from "./generatorApiModel";
 import GeneratorApiPath from "./generatorApiPath";
 import {checkIfObjectIsEmpty, sentenceToCamelCase} from "../utils";
 import GeneratorApiMethod from "./generatorApiMethod";
+import RequestBody from "../interfaces/requestBody";
+import ResponseBody from "../interfaces/responseBody";
 
 // Used for file template generation
 const ejs = require('ejs');
@@ -65,12 +67,26 @@ export default class GeneratorApiConfiguration {
         this._paths = [];
     }
 
-    private _getUniqueMethodVariables(): { name: string, type: string }[] {
-        return _.uniqBy(_.flatMapDeep(this._paths, path => _.map(path.methods, (method: GeneratorApiMethod) => {
-            if (method.responseBody) {
-                return method.responseBody;
-            }
-        })), 'name');
+    /**
+     * Collect unique response body parameters from paths and methods.
+     * @private
+     */
+    private _getUniqueResponseVariables(): ResponseBody[] {
+        const deepFlatMapOfVariables = _.flatMapDeep(this._paths, path =>
+            _.map(path.methods, (method: GeneratorApiMethod) => method.responseBody));
+        return _.uniqBy(_.reject(deepFlatMapOfVariables, v =>
+            _.isUndefined(v) || _.isNull(v)), body => body.name);
+    }
+
+    /**
+     * Collect unique request body parameters from every path and method.
+     * @private
+     */
+    private _getUniqueRequestVariables(): RequestBody[] {
+        const deepFlatMapOfVariables = _.flatMapDeep(this._paths, path =>
+            _.map(path.methods, (method: GeneratorApiMethod) => method.requestBody));
+        return _.uniqBy(_.reject(deepFlatMapOfVariables, v =>
+            _.isUndefined(v) || _.isNull(v)), body => body.name);
     }
 
     /**

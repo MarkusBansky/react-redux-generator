@@ -20,7 +20,10 @@ export default class GeneratorApiMethod {
         this._type = toFirstUpperLetter(name);
         this._consumes = data.consumes && data.consumes[0];
         this._produces = data.produces && data.produces[0];
+
         this._pathParameters = [];
+        this._responseBody = undefined;
+        this._requestBody = undefined;
 
         console.log(chalk.cyanBright('Method response object:'));
         console.log(data.responses['200'].content['application/json']);
@@ -66,7 +69,7 @@ export default class GeneratorApiMethod {
         this._produces = value;
     }
 
-    get requestBody(): RequestBody {
+    get requestBody(): RequestBody | undefined {
         return this._requestBody;
     }
 
@@ -90,7 +93,7 @@ export default class GeneratorApiMethod {
         this._type = value;
     }
 
-    get responseBody(): ResponseBody {
+    get responseBody(): ResponseBody | undefined {
         return this._responseBody;
     }
 

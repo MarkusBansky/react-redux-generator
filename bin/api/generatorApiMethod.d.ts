@@ -16,12 +16,12 @@ export default class GeneratorApiMethod {
     set consumes(value: string);
     get produces(): string;
     set produces(value: string);
-    get requestBody(): RequestBody;
+    get requestBody(): RequestBody | undefined;
     set requestBody(value: RequestBody);
     get pathParameters(): RequestParameter[];
     set pathParameters(value: RequestParameter[]);
     get type(): string;
     set type(value: string);
-    get responseBody(): ResponseBody;
+    get responseBody(): ResponseBody | undefined;
     set responseBody(value: ResponseBody);
 }

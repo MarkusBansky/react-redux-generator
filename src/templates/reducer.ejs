@@ -1,8 +1,6 @@
 import _ from 'lodash';
 import produce from 'immer';
-
-<% var uniqueVariables = _getUniqueMethodVariables() %>
-
+<% var uniqueVariables = _getUniqueResponseVariables() %>
 import {
 <% for(var pathI = 0; pathI < _paths.length; ++pathI) {
 for(var methodI = 0; methodI < _paths[pathI]._methods.length; ++methodI) { method = _paths[pathI]._methods[methodI] -%>
