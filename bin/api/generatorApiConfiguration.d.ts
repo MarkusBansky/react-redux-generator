@@ -36,7 +36,16 @@ export default class GeneratorApiConfiguration {
      */
     private _paths;
     constructor(pathToDefinition: string, pathToBuild: string);
-    private _getUniqueMethodVariables;
+    /**
+     * Collect unique response body parameters from paths and methods.
+     * @private
+     */
+    private _getUniqueResponseVariables;
+    /**
+     * Collect unique request body parameters from every path and method.
+     * @private
+     */
+    private _getUniqueRequestVariables;
     /**
      * Used to retrieve the name of the definition file. Is used to create a reducer and add a new axios client
      * whether it is required.

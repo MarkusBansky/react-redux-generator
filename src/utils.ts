@@ -1,21 +1,11 @@
+import _ from 'lodash';
 import chalk from "chalk";
 import * as fs from "fs";
 import * as path from "path";
+import RequestParameter from "./interfaces/requestParameter";
 
 export const toFirstUpperLetter = (text: string): string => {
     return text[0].toUpperCase().concat(text.slice(1));
-};
-
-export const checkIfObjectIsEmpty = (name: string, element?: any): void => {
-    let date = new Date();
-    if (element === undefined || element === null) {
-        console.log(name + ' empty: ' + chalk.redBright(true) + ' - ' + date + ' ' + date.getMilliseconds() + 'ms');
-        return;
-    } else if (Array.isArray(element) && element.length === 0) {
-        console.log(name + ' empty: ' + chalk.redBright(true) + ' - ' + date + ' ' + date.getMilliseconds() + 'ms');
-        return;
-    }
-    console.log(name + ' not empty: ' + chalk.greenBright(false) + ' - ' + date + ' ' + date.getMilliseconds() + 'ms');
 };
 
 export const sentenceToCamelCase = (sentence: string): string => {
@@ -44,8 +34,65 @@ export function removeDirectory(dir_path): void {
 
 export function getSchemaNameFromResponse(response: any): string {
     try {
-        return response.content['application/json'].schema['$ref'].split('/').reverse()[0];
+        if (response.content['application/json'].schema['$ref']) {
+            return response.content['application/json'].schema['$ref'].split('/').reverse()[0];
+        } else {
+            return response.content['application/json'].schema.type;
+        }
     } catch {
         return 'specify_the_return_schema_with_ref';
     }
+}
+
+export function schemaPropertiesToTypedString(schema: any): string {
+    let result = '{ ';
+
+    _.map(schema.properties, (e, key) => {
+        result += `${key}: `;
+
+        switch (e.type) {
+            case 'array':
+                if (e.items.type == 'integer') {
+                    result += `number[], `;
+                } else {
+                    result += `${e.items.type}[], `;
+                }
+                break;
+            case 'object':
+                result += schemaPropertiesToTypedString(e) + ', ';
+                break;
+            case 'integer':
+                result += 'number, ';
+                break;
+            default:
+                result += `${e.type}, `;
+        }
+    });
+
+    if (_.keys(schema.properties).length > 0) {
+        result = result.slice(0, result.length - 2);
+    }
+
+    result += ' }';
+    return result;
+}
+
+export function requestParametersToTypedString(parameters: RequestParameter[]): string {
+    let result = '';
+
+    _.forEach(_.orderBy(parameters, p => p.required, 'desc'), param => {
+        result += `${param.name}${param.required ? '' : '?'}: ${param.type}, `;
+    });
+
+    return result;
+}
+
+export function requestParametersToUrlObjectString(parameters: RequestParameter[]): string {
+    let result = '';
+
+    _.forEach(_.orderBy(parameters, p => p.required, 'desc'), param => {
+        result += `{name: \'${param.name}\', value: ${param.name}}, `;
+    });
+
+    return result;
 }

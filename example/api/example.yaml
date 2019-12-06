@@ -27,6 +27,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserDto'
+    patch:
+      operationId: updateUserInfo
+      summary: Update user information.
+      description: Edit username for existing user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  format: int64
+                  description: User ID.
+                username:
+                  type: string
+                  description: Username for this user.
+      responses:
+        '200':
+          description: In case off success returns user object that is changed and saved into the database.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto'
 
   /users/{id}:
     get:
