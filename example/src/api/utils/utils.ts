@@ -75,3 +75,31 @@ export function composeUrlWithParameters(
     });
     return path;
 }
+
+/**
+* Used to format method url with all possible parameters.
+* @param url
+* @param parameters
+*/
+export function formatUrlWith(url: string, ...parameters: {name: string, value: any}[]) {
+    let newUrl = url;
+    let query = '';
+
+    if (parameters && parameters.length > 0) {
+        parameters.map(p => {
+            if (p.value) {
+                if (newUrl.includes(`{${p.name}}`)) {
+                    newUrl = newUrl.replace(`{${p.name}}`, p.value);
+                } else {
+                    query += `&${p.name}=${p.value}`;
+                }
+            }
+        });
+
+        if (query.length > 0) {
+            query = '?' + query.slice(1);
+        }
+    }
+
+    return newUrl + query;
+}

@@ -2,6 +2,7 @@ import _ from 'lodash';
 import chalk from "chalk";
 import * as fs from "fs";
 import * as path from "path";
+import RequestParameter from "./interfaces/requestParameter";
 
 export const toFirstUpperLetter = (text: string): string => {
     return text[0].toUpperCase().concat(text.slice(1));
@@ -51,7 +52,11 @@ export function schemaPropertiesToTypedString(schema: any): string {
 
         switch (e.type) {
             case 'array':
-                result += `${e.items.type}[], `;
+                if (e.items.type == 'integer') {
+                    result += `number[], `;
+                } else {
+                    result += `${e.items.type}[], `;
+                }
                 break;
             case 'object':
                 result += schemaPropertiesToTypedString(e) + ', ';
@@ -69,5 +74,25 @@ export function schemaPropertiesToTypedString(schema: any): string {
     }
 
     result += ' }';
+    return result;
+}
+
+export function requestParametersToTypedString(parameters: RequestParameter[]): string {
+    let result = '';
+
+    _.forEach(parameters, param => {
+        result += `${param.name}${param.required ? '' : '?'}: ${param.type}, `;
+    });
+
+    return result;
+}
+
+export function requestParametersToUrlObjectString(parameters: RequestParameter[]): string {
+    let result = '';
+
+    _.forEach(parameters, param => {
+        result += `{name: \'${param.name}\', value: ${param.name}}, `;
+    });
+
     return result;
 }

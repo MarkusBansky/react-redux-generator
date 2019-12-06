@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import {toFirstUpperLetter} from "../utils";
+import {requestParametersToTypedString, requestParametersToUrlObjectString, toFirstUpperLetter} from "../utils";
 import RequestBody from "../interfaces/requestBody";
 import RequestParameter from "../interfaces/requestParameter";
 import chalk from "chalk";
@@ -15,6 +15,7 @@ export default class GeneratorApiMethod {
     private _requestBody?: RequestBody;
 
     private _pathParameters: RequestParameter[];
+    private _queryParameters: RequestParameter[];
 
     constructor(name: string, data: any) {
         this._name = toFirstUpperLetter(data.operationId);
@@ -23,6 +24,7 @@ export default class GeneratorApiMethod {
         this._produces = data.produces && data.produces[0];
 
         this._pathParameters = [];
+        this._queryParameters = [];
         this._responseBody = undefined;
         this._requestBody = undefined;
 
@@ -34,13 +36,29 @@ export default class GeneratorApiMethod {
             this._requestBody = new RequestBody(data.requestBody);
         }
 
-        // _.forEach(data.parameters, param => {
-        //     if (param.in === 'body') {
-        //         this._requestBody = new RequestBody(param);
-        //     } else if (param.in === 'path') {
-        //         this._pathParameters.push(new RequestParameter(param));
-        //     }
-        // });
+        _.forEach(data.parameters, param => {
+            if (param.in === 'path') {
+                this._pathParameters.push(new RequestParameter(param));
+            } else if (param.in === 'query') {
+                this._queryParameters.push(new RequestParameter(param));
+            }
+        });
+    }
+
+    get pathParametersTypedString(): string {
+        return requestParametersToTypedString(this._pathParameters);
+    }
+
+    get queryParametersTypedString(): string {
+        return requestParametersToTypedString(this._queryParameters);
+    }
+
+    get pathParametersObjectsString(): string {
+        return requestParametersToUrlObjectString(this._pathParameters);
+    }
+
+    get queryParametersObjectsString(): string {
+        return requestParametersToUrlObjectString(this._queryParameters);
     }
 
     get name(): string {
@@ -97,5 +115,13 @@ export default class GeneratorApiMethod {
 
     set responseBody(value: ResponseBody) {
         this._responseBody = value;
+    }
+
+    get queryParameters(): RequestParameter[] {
+        return this._queryParameters;
+    }
+
+    set queryParameters(value: RequestParameter[]) {
+        this._queryParameters = value;
     }
 }

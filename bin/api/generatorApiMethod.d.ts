@@ -9,7 +9,12 @@ export default class GeneratorApiMethod {
     private _responseBody?;
     private _requestBody?;
     private _pathParameters;
+    private _queryParameters;
     constructor(name: string, data: any);
+    get pathParametersTypedString(): string;
+    get queryParametersTypedString(): string;
+    get pathParametersObjectsString(): string;
+    get queryParametersObjectsString(): string;
     get name(): string;
     set name(value: string);
     get consumes(): string;
@@ -24,4 +29,6 @@ export default class GeneratorApiMethod {
     set type(value: string);
     get responseBody(): ResponseBody | undefined;
     set responseBody(value: ResponseBody);
+    get queryParameters(): RequestParameter[];
+    set queryParameters(value: RequestParameter[]);
 }
