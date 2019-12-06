@@ -45,20 +45,12 @@ export default class GeneratorApiMethod {
         });
     }
 
-    get pathParametersTypedString(): string {
-        return requestParametersToTypedString(this._pathParameters);
+    get parametersTypedString(): string {
+        return requestParametersToTypedString(_.concat(this._pathParameters, this._queryParameters));
     }
 
-    get queryParametersTypedString(): string {
-        return requestParametersToTypedString(this._queryParameters);
-    }
-
-    get pathParametersObjectsString(): string {
-        return requestParametersToUrlObjectString(this._pathParameters);
-    }
-
-    get queryParametersObjectsString(): string {
-        return requestParametersToUrlObjectString(this._queryParameters);
+    get parametersObjectsString(): string {
+        return requestParametersToUrlObjectString(_.concat(this._pathParameters, this._queryParameters));
     }
 
     get name(): string {

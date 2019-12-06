@@ -80,7 +80,7 @@ export function schemaPropertiesToTypedString(schema: any): string {
 export function requestParametersToTypedString(parameters: RequestParameter[]): string {
     let result = '';
 
-    _.forEach(parameters, param => {
+    _.forEach(_.orderBy(parameters, p => p.required, 'desc'), param => {
         result += `${param.name}${param.required ? '' : '?'}: ${param.type}, `;
     });
 
@@ -90,7 +90,7 @@ export function requestParametersToTypedString(parameters: RequestParameter[]): 
 export function requestParametersToUrlObjectString(parameters: RequestParameter[]): string {
     let result = '';
 
-    _.forEach(parameters, param => {
+    _.forEach(_.orderBy(parameters, p => p.required, 'desc'), param => {
         result += `{name: \'${param.name}\', value: ${param.name}}, `;
     });
 

@@ -18,11 +18,11 @@ export const api<%=method.name%>Responses = createActionsObject('api<%=method.na
 
 <% for(pathI = 0; pathI < _paths.length; ++pathI) {for(methodI = 0; methodI < _paths[pathI].methods.length; ++methodI) {
     method = _paths[pathI].methods[methodI] -%>
-export const api<%=method.name%>Action = (<%=method.requestBody%><%-method.pathParametersTypedString%><%-method.queryParametersTypedString%>redirectTo?: string) =>
+export const api<%=method.name%>Action = (<%=method.requestBody%><%-method.parametersTypedString%>redirectTo?: string) =>
     createHttpRequest(
         api<%=method.name%>Responses,
         <%=method.type.toUpperCase()%>,
-        formatUrlWith(api<%=method.name%>URL, <%-method.pathParametersObjectsString%><%-method.queryParametersObjectsString%>),
+        formatUrlWith(api<%=method.name%>URL, <%-method.parametersObjectsString%>),
         <%=method.requestBody?method.requestBody.name:'undefined'%>,
         '<%=_name%>',
         redirectTo
