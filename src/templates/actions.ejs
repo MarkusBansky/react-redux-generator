@@ -3,25 +3,24 @@ import {AxiosAction, createActionsObject, createHttpRequest, composeUrlWithParam
 import {GET, POST, PUT, HEAD, PATCH, DELETE, OPTIONS} from '../utils/constants';
 <%var pathI; var methodI; var method%>
 // URLs
-<%for(pathI = 0; pathI < _paths.length; ++pathI) {for(methodI = 0; methodI < _paths[pathI]._methods.length; ++methodI) {
-    method = _paths[pathI]._methods[methodI]%>
-const api<%=method._name%>URL = '<%=_paths[pathI]._path%>';
+<%for(pathI = 0; pathI < _paths.length; ++pathI) {for(methodI = 0; methodI < _paths[pathI].methods.length; ++methodI) { method = _paths[pathI].methods[methodI] -%>
+const api<%=method.name%>URL = '<%=_paths[pathI].path%>';
 <% }} %>
 // Variables for reducers actions
-<%for(pathI = 0; pathI < _paths.length; ++pathI) {for(methodI = 0; methodI < _paths[pathI]._methods.length; ++methodI) {
-    method = _paths[pathI]._methods[methodI]%>
-export const api<%=method._name%>Responses = createActionsObject('api<%=method._name%>Responses');
+<%for(pathI = 0; pathI < _paths.length; ++pathI) {for(methodI = 0; methodI < _paths[pathI].methods.length; ++methodI) { method = _paths[pathI].methods[methodI] -%>
+export const api<%=method.name%>Responses = createActionsObject('api<%=method.name%>Responses');
 <%}}%>
 // Paths to endpoint methods
-<% for(pathI = 0; pathI < _paths.length; ++pathI) {for(methodI = 0; methodI < _paths[pathI]._methods.length; ++methodI) {
-    method = _paths[pathI]._methods[methodI]%>
-export const api<%=method._name%>Action = (<%=method._requestBody?'data: '+method._requestBody._name+', ':''%>redirectTo?: string) =>
+<% for(pathI = 0; pathI < _paths.length; ++pathI) {for(methodI = 0; methodI < _paths[pathI].methods.length; ++methodI) {
+    method = _paths[pathI].methods[methodI] -%>
+export const api<%=method.name%>Action = (<%=method.requestBody?'data: '+method.requestBody.type+', ':''%>redirectTo?: string) =>
     createHttpRequest(
-        api<%=method._name%>Responses,
-        <%=method._type.toUpperCase()%>,
-        api<%=method._name%>URL,
-        <%=method._requestBody?'data':'null'%>,
+        api<%=method.name%>Responses,
+        <%=method.type.toUpperCase()%>,
+        api<%=method.name%>URL,
+        <%=method.requestBody?'data':'null'%>,
         '<%=_name%>',
         redirectTo
     );
+
 <% }} %>

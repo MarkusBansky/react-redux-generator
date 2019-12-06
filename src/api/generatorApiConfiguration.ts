@@ -67,8 +67,8 @@ export default class GeneratorApiConfiguration {
 
     private _getUniqueMethodVariables(): { name: string, type: string }[] {
         return _.uniqBy(_.flatMapDeep(this._paths, path => _.map(path.methods, (method: GeneratorApiMethod) => {
-            if (method.resultVariableName) {
-                return { name: method.resultVariableName, type: method.resultVariableType };
+            if (method.responseBody) {
+                return method.responseBody;
             }
         })), 'name');
     }

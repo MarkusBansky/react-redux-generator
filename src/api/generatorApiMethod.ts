@@ -1,8 +1,9 @@
 import _ from 'lodash';
-import {getSchemaNameFromResponse, toFirstUpperLetter} from "../utils";
+import {toFirstUpperLetter} from "../utils";
 import RequestBody from "../interfaces/requestBody";
 import RequestParameter from "../interfaces/requestParameter";
 import chalk from "chalk";
+import ResponseBody from "../interfaces/responseBody";
 
 export default class GeneratorApiMethod {
     private _name: string;
@@ -10,9 +11,7 @@ export default class GeneratorApiMethod {
     private _consumes: string;
     private _produces: string;
 
-    private _resultVariableName?: string;
-    private _resultVariableType?: string;
-
+    private _responseBody?: ResponseBody;
     private _requestBody?: RequestBody;
     private _pathParameters: RequestParameter[];
 
@@ -23,21 +22,24 @@ export default class GeneratorApiMethod {
         this._produces = data.produces && data.produces[0];
         this._pathParameters = [];
 
-        let varName = getSchemaNameFromResponse(data.responses['200'])
-            .replace(/([Dd]to|[Dd]ao)/g, '');
-        this._resultVariableName = varName[0].toLowerCase() + varName.slice(1);
-        this._resultVariableType = getSchemaNameFromResponse(data.responses['200']);
-
         console.log(chalk.cyanBright('Method response object:'));
         console.log(data.responses['200'].content['application/json']);
 
-        _.forEach(data.parameters, param => {
-            if (param.in === 'body') {
-                this._requestBody = new RequestBody(param);
-            } else if (param.in === 'path') {
-                this._pathParameters.push(new RequestParameter(param));
-            }
-        });
+        if (data.responses['200']) {
+            this._responseBody = new ResponseBody(data.responses['200']);
+        }
+
+        if (data.requestBody) {
+            this._requestBody = new RequestBody(data.requestBody);
+        }
+
+        // _.forEach(data.parameters, param => {
+        //     if (param.in === 'body') {
+        //         this._requestBody = new RequestBody(param);
+        //     } else if (param.in === 'path') {
+        //         this._pathParameters.push(new RequestParameter(param));
+        //     }
+        // });
     }
 
     get name(): string {
@@ -88,19 +90,11 @@ export default class GeneratorApiMethod {
         this._type = value;
     }
 
-    get resultVariableName(): string {
-        return this._resultVariableName;
+    get responseBody(): ResponseBody {
+        return this._responseBody;
     }
 
-    set resultVariableName(value: string) {
-        this._resultVariableName = value;
-    }
-
-    get resultVariableType(): string {
-        return this._resultVariableType;
-    }
-
-    set resultVariableType(value: string) {
-        this._resultVariableType = value;
+    set responseBody(value: ResponseBody) {
+        this._responseBody = value;
     }
 }

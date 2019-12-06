@@ -1,12 +1,12 @@
 import RequestBody from "../interfaces/requestBody";
 import RequestParameter from "../interfaces/requestParameter";
+import ResponseBody from "../interfaces/responseBody";
 export default class GeneratorApiMethod {
     private _name;
     private _type;
     private _consumes;
     private _produces;
-    private _resultVariableName?;
-    private _resultVariableType?;
+    private _responseBody?;
     private _requestBody?;
     private _pathParameters;
     constructor(name: string, data: any);
@@ -22,8 +22,6 @@ export default class GeneratorApiMethod {
     set pathParameters(value: RequestParameter[]);
     get type(): string;
     set type(value: string);
-    get resultVariableName(): string;
-    set resultVariableName(value: string);
-    get resultVariableType(): string;
-    set resultVariableType(value: string);
+    get responseBody(): ResponseBody;
+    set responseBody(value: ResponseBody);
 }
