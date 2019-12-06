@@ -13,6 +13,7 @@ export default class GeneratorApiMethod {
 
     private _responseBody?: ResponseBody;
     private _requestBody?: RequestBody;
+
     private _pathParameters: RequestParameter[];
 
     constructor(name: string, data: any) {
@@ -24,9 +25,6 @@ export default class GeneratorApiMethod {
         this._pathParameters = [];
         this._responseBody = undefined;
         this._requestBody = undefined;
-
-        console.log(chalk.cyanBright('Method response object:'));
-        console.log(data.responses['200'].content['application/json']);
 
         if (data.responses['200']) {
             this._responseBody = new ResponseBody(data.responses['200']);

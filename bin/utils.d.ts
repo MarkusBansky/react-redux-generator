@@ -1,5 +1,4 @@
 export declare const toFirstUpperLetter: (text: string) => string;
-export declare const checkIfObjectIsEmpty: (name: string, element?: any) => void;
 export declare const sentenceToCamelCase: (sentence: string) => string;
 /**
  * Remove directory recursively
@@ -7,3 +6,4 @@ export declare const sentenceToCamelCase: (sentence: string) => string;
  */
 export declare function removeDirectory(dir_path: any): void;
 export declare function getSchemaNameFromResponse(response: any): string;
+export declare function schemaPropertiesToTypedString(schema: any): string;

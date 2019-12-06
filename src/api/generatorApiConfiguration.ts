@@ -3,7 +3,7 @@ import chalk from 'chalk';
 import SwaggerParser from "swagger-parser";
 import GeneratorApiModel from "./generatorApiModel";
 import GeneratorApiPath from "./generatorApiPath";
-import {checkIfObjectIsEmpty, sentenceToCamelCase} from "../utils";
+import {sentenceToCamelCase} from "../utils";
 import GeneratorApiMethod from "./generatorApiMethod";
 import RequestBody from "../interfaces/requestBody";
 import ResponseBody from "../interfaces/responseBody";
@@ -86,7 +86,8 @@ export default class GeneratorApiConfiguration {
         const deepFlatMapOfVariables = _.flatMapDeep(this._paths, path =>
             _.map(path.methods, (method: GeneratorApiMethod) => method.requestBody));
         return _.uniqBy(_.reject(deepFlatMapOfVariables, v =>
-            _.isUndefined(v) || _.isNull(v)), body => body.name);
+            _.isUndefined(v) || _.isNull(v) || v.name == 'requestBody' || v.name == 'requestArray'),
+                body => body.name);
     }
 
     /**
@@ -114,23 +115,14 @@ export default class GeneratorApiConfiguration {
 
             // Create models for API
             this._models = _.entries(api.components.schemas).map(def => {
-                console.log(chalk.bgCyan(def[0]));
-                console.log(def[1]);
                 return new GeneratorApiModel(def[0], def[1]);
             });
 
             // Create paths from API object
             this._paths = _.entries(api.paths).map(def => {
-                console.log(chalk.bgMagenta(def[0]));
-                console.log(def[1]);
                 return new GeneratorApiPath(def[0], def[1]);
             });
 
-            checkIfObjectIsEmpty('Models', this._models);
-            checkIfObjectIsEmpty('Endpoints', this._paths);
-
-            console.log(chalk.bgGreen('this'));
-            console.log(this);
         } catch (e) {
             reject(e);
         }
@@ -152,9 +144,6 @@ export default class GeneratorApiConfiguration {
             let pathToModels = path.resolve(this._pathToOutputFolder, 'models');
             let pathToActions = path.resolve(this._pathToOutputFolder, 'actions');
             let pathToReducers = path.resolve(this._pathToOutputFolder, 'reducers');
-
-            checkIfObjectIsEmpty('Models', this._models);
-            checkIfObjectIsEmpty('Endpoints', this._paths);
 
             // Generate MODELS for every schema input in the api
             _.forEach(this._models, (model, index, arr) => {

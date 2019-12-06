@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import {getSchemaNameFromResponse} from "../utils";
+import {getSchemaNameFromResponse, schemaPropertiesToTypedString} from "../utils";
 
 export default class RequestBody {
     private _name: string;
@@ -7,16 +7,22 @@ export default class RequestBody {
     private _required: boolean;
     private _description?: string;
 
-    constructor(responseBody: any) {
-        let varName = getSchemaNameFromResponse(responseBody)
+    constructor(requestBody: any) {
+        let varName = getSchemaNameFromResponse(requestBody)
             .replace(/([Dd]to|[Dd]ao)/g, '');
 
         this._name = varName[0].toLowerCase() + varName.slice(1);
-        this._type = getSchemaNameFromResponse(responseBody);
-        this._required = responseBody.required !== undefined && responseBody.required;
+        this._type = getSchemaNameFromResponse(requestBody);
+        this._required = requestBody.required !== undefined && requestBody.required;
 
-        console.log(chalk.cyan('requestBody: ' + this._name));
-        console.log(this);
+        switch(this._type) {
+            case 'array':
+                this._name = 'requestArray';
+                this._type = requestBody.content['application/json'].schema.items.type + '[]';
+            case 'object':
+                this._name = 'requestBody';
+                this._type = schemaPropertiesToTypedString(requestBody.content['application/json'].schema);
+        }
     }
 
     public toString(): string {

@@ -3,7 +3,7 @@ export default class RequestBody {
     private _type;
     private _required;
     private _description?;
-    constructor(responseBody: any);
+    constructor(requestBody: any);
     toString(): string;
     get name(): string;
     set name(value: string);
