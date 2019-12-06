@@ -11,10 +11,8 @@ export default class GeneratorApiMethod {
     private _pathParameters;
     private _queryParameters;
     constructor(name: string, data: any);
-    get pathParametersTypedString(): string;
-    get queryParametersTypedString(): string;
-    get pathParametersObjectsString(): string;
-    get queryParametersObjectsString(): string;
+    get parametersTypedString(): string;
+    get parametersObjectsString(): string;
     get name(): string;
     set name(value: string);
     get consumes(): string;

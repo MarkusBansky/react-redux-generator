@@ -1,6 +1,6 @@
 {
   "name": "react-redux-api-generator",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "This plugin generates react-ready typescript classes and functions for REST API communication. All you need to have is an OpenAPI 3.0 definition file.",
   "author": "Markiian Benovskyi",
   "license": "LGPL-3.0-or-later",
