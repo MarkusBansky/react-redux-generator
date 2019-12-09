@@ -35,7 +35,7 @@ The package would search for `rrg-config.json` in current directory. If there is
 
 Create a file called `rrg-config.json` in your project's root directory next to your `package.json`.
 
-To find out what configurations are possible visit the [Config Wiki](https://github.com/MarkusBansky/react-redux-generator/wiki/Configuration-file) page.
+To find out what configurations are possible visit the [Configuration and command line arguments Wiki page](https://github.com/MarkusBansky/react-redux-generator/wiki/Config-and-command-line-arguments).
 
 ## Script
 
