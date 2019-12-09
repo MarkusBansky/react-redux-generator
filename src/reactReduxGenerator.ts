@@ -3,6 +3,8 @@ import Listr from 'listr';
 import {CONFIG_PATH, WORKING_DIRECTORY} from "./constants";
 import GeneratorApiConfiguration from "./api/generatorApiConfiguration";
 import {removeDirectory} from "./utils";
+import Program from "./interfaces/program";
+import chalk from "chalk";
 
 const ejs = require('ejs');
 const path = require('path');
@@ -12,22 +14,48 @@ const fs = require('fs');
  * Main file used to generate API structure from Swagger definition.
  */
 export default class ReactReduxGenerator {
-    private _pathToApiDefinitionsFolder: string;
+    private readonly _usingCommandLineArguments: boolean;
     private _pathToApiBuildFolder: string;
-
     private _apisDefinitionFiles: string[];
+
     private _generators: GeneratorApiConfiguration[];
 
     /**
      * Used to instantiate object of class. Sets default values to global variables, creates list of tasks
      * for API creation and generation.
      */
-    constructor() {
+    constructor(program: Program) {
+        this._usingCommandLineArguments = false;
+
         // Read the config file and load all config variables
-        this._pathToApiDefinitionsFolder = WORKING_DIRECTORY + '/api';
         this._pathToApiBuildFolder = WORKING_DIRECTORY + '/src/api';
         this._apisDefinitionFiles = [];
         this._generators = [];
+
+        // Parse arguments of the program if they are entered for the application
+        if (program.input || program.output) {
+            // Check if any of these is not set
+            // if it is not then exit with code 1
+            if (!program.input || !program.output) {
+                chalk.red('Error. You have to include both inputs and the output if you want to generate api using command parameters');
+                process.exit(1);
+            }
+
+            // If everything is fine and we have both inputs and output set
+            // set the react redux generator values
+            console.log(program.input, program.output);
+            console.log(chalk.cyan('Notice!') + chalk.red(' Using command line variables, skipping config and directory tasks...'));
+
+            // Depending if the input param for inputs is array or single
+            if (Array.isArray(program.input)) {
+                this._apisDefinitionFiles = program.input.map(i => path.join(WORKING_DIRECTORY, i));
+            } else {
+                this._apisDefinitionFiles = [path.join(WORKING_DIRECTORY, program.input)];
+            }
+
+            this._usingCommandLineArguments = true;
+            this._pathToApiBuildFolder = path.join(WORKING_DIRECTORY, program.output);
+        }
     }
 
     /**
@@ -36,8 +64,7 @@ export default class ReactReduxGenerator {
     public start() {
         // Create all tasks for the project API generation
         const tasks = new Listr([
-            {title: 'Read RRG configuration file', task: this.readConfig},
-            {title: 'Load API definition files', task: this.readInputDirectory},
+            {title: 'Read RRG configuration file', task: this.readConfig, skip: () => this._usingCommandLineArguments},
             {title: 'Clear output directory', task: this.clearOutputDirectory},
             {title: 'Create generator controllers', task: this.createGeneratorsFromAPIFiles},
             {title: 'Create API structure', task: this.createAPICodeStructure},
@@ -56,28 +83,32 @@ export default class ReactReduxGenerator {
      * Try to read the configuration file if it exists, then set all global variables to be equal to values extracted
      * from the config file. If it does not exist then system would use default values.
      */
-    readConfig = () => new Promise((resolve, _) => {
+    readConfig = () => new Promise((resolve, reject) => {
         try {
             // Try to read the file in the config path
             const rawFileData = fs.readFileSync(CONFIG_PATH);
-            const config: {[key: string]: any} = JSON.parse(rawFileData);
+            const config: Program = JSON.parse(rawFileData);
 
             // Read definition directory
-            if (config.definitionDir) {
-                this._pathToApiDefinitionsFolder = WORKING_DIRECTORY + '/' + config.definitionDir;
+            if (config.input && Array.isArray(config.input)) {
+                this._apisDefinitionFiles = config.input.map(i => path.join(WORKING_DIRECTORY, i));
+            } else if (config.input && typeof config.input === 'string') {
+                this._apisDefinitionFiles.push(path.join(WORKING_DIRECTORY, config.input));
+            } else {
+                process.emitWarning('Could not read value for input files in the config file.');
             }
 
             // Read build directory
-            if (config.buildDir) {
-                this._pathToApiBuildFolder = WORKING_DIRECTORY + '/' + config.buildDir;
+            if (config.output) {
+                this._pathToApiBuildFolder = path.join(WORKING_DIRECTORY, config.output);
             }
 
             // Debug received properties and resolve the promise
-            console.log('\t Path to definitions folder: ' + this._pathToApiDefinitionsFolder);
-            console.log('\t Path to build folder: ' + this._pathToApiBuildFolder);
+            console.log('\t Path to definitions folder: ', this._apisDefinitionFiles);
+            console.log('\t Path to build folder: ', this._pathToApiBuildFolder);
             resolve('Successfully loaded configuration file');
         } catch (e) {
-            resolve('Configuration file not found, using default values or the ones from command line');
+            reject('Configuration file not found, you are required to add a configuration file or use command line arguments');
         }
     });
 
@@ -88,27 +119,6 @@ export default class ReactReduxGenerator {
         try {
             removeDirectory(this._pathToApiBuildFolder);
             resolve("Done");
-        } catch (e) {
-            reject(e);
-        }
-    });
-
-    /*
-     * Reads the input directory defined in settings. Then reads the list of files it is containing. If the directory
-     * does not contain any files in it, then reject the promise.
-     */
-    readInputDirectory = () => new Promise((resolve, reject) => {
-        try {
-            // Read directory and list of files it is containing
-            let efs = fs.readdirSync(this._pathToApiDefinitionsFolder);
-            this._apisDefinitionFiles = _.map(efs, f => this._pathToApiDefinitionsFolder + '/' + f);
-
-            // Depending on the number of definitions found, resolve or reject the result
-            if (efs.length > 0) {
-                resolve('Loaded ' + efs.length + ' definitions');
-            } else {
-                reject('No definitions found');
-            }
         } catch (e) {
             reject(e);
         }

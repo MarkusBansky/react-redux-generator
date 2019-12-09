@@ -1,4 +1,4 @@
 {
-  "definitionDir": "api",
-  "buildDir": "src/api"
+  "input": ["api/example.yaml"],
+  "output": "src/api"
 }

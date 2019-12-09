@@ -117,8 +117,10 @@ components:
         password_hash:
           type: string
           description: Hash of user password
+        role:
+          $ref: '#/components/schemas/RoleDto'
 
-    UserDto:
+    UserGetDto:
       type: object
       description:
         User object used to be returned from REST endpoint on a request. Contains only
@@ -131,3 +133,21 @@ components:
         username:
           type: string
           description: User nickname
+        role:
+          $ref: '#/components/schemas/RoleDto'
+
+    RoleDto:
+      type: object
+      description: User role
+      required:
+        - name
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Role ID
+        name:
+          type: string
+          description: Name of the role
+
+

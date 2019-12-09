@@ -36,6 +36,8 @@ export function getSchemaNameFromResponse(response: any): string {
     try {
         if (response.content['application/json'].schema['$ref']) {
             return response.content['application/json'].schema['$ref'].split('/').reverse()[0];
+        } else if (typeof response === "string") {
+            return response.split('/').reverse()[0];
         } else {
             return response.content['application/json'].schema.type;
         }
