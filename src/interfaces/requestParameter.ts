@@ -1,3 +1,5 @@
+import {getSchemaNameFromResponse} from "../utils";
+
 export default class RequestParameter {
     private _name: string;
     private _required: boolean;
@@ -5,8 +7,28 @@ export default class RequestParameter {
 
     constructor(data: any) {
         this._name = data.name;
-        this._type = data.type;
         this._required = data.required;
+
+        switch(data.schema.type) {
+            case 'array':
+                if (data.schema.items.type == 'integer') {
+                    this._type = 'number[]';
+                } else {
+                    this._type = data.schema.items.type + '[]';
+                }
+                break;
+            case 'integer':
+                this._type = 'number';
+                break;
+            case undefined:
+                if (data['$ref']) {
+                    this._type = getSchemaNameFromResponse(data['$ref']);
+                    break;
+                }
+            default:
+                this._type = data.schema.type;
+                break;
+        }
     }
 
     get name(): string {

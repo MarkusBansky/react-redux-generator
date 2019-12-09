@@ -1,9 +1,10 @@
 import Listr from 'listr';
+import Program from "./interfaces/program";
 /**
  * Main file used to generate API structure from Swagger definition.
  */
 export default class ReactReduxGenerator {
-    private _pathToApiDefinitionsFolder;
+    private readonly _usingCommandLineArguments;
     private _pathToApiBuildFolder;
     private _apisDefinitionFiles;
     private _generators;
@@ -11,7 +12,7 @@ export default class ReactReduxGenerator {
      * Used to instantiate object of class. Sets default values to global variables, creates list of tasks
      * for API creation and generation.
      */
-    constructor();
+    constructor(program: Program);
     /**
      * Used to start the generation sequence of tasks.
      */
@@ -22,7 +23,6 @@ export default class ReactReduxGenerator {
      */
     readConfig: () => Promise<unknown>;
     clearOutputDirectory: () => Promise<unknown>;
-    readInputDirectory: () => Promise<unknown>;
     /**
      * For each API file in the input folder, create a new API generator configuration class object with input path
      * to it's relevant file. Later these files would be used to generate different API files.
@@ -46,4 +46,10 @@ export default class ReactReduxGenerator {
      * from the request and then processes it and passes to the view.
      */
     generateAPIFiles: () => Promise<unknown>;
+    /**
+     * Run to generate final middleware file specification for this api definition. This creates a single file
+     * with constants for each api definition. It includes all reducers, creates all axios clients and
+     * exports variables to be included in the state creation later in the user code.
+     */
+    generateMiddleware: () => Promise<unknown>;
 }

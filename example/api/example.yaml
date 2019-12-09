@@ -27,6 +27,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserDto'
+    patch:
+      operationId: updateUserInfo
+      summary: Update user information.
+      description: Edit username for existing user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  format: int64
+                  description: User ID.
+                username:
+                  type: string
+                  description: Username for this user.
+      responses:
+        '200':
+          description: In case off success returns user object that is changed and saved into the database.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto'
 
   /users/{id}:
     get:
@@ -92,8 +117,10 @@ components:
         password_hash:
           type: string
           description: Hash of user password
+        role:
+          $ref: '#/components/schemas/RoleDto'
 
-    UserDto:
+    UserGetDto:
       type: object
       description:
         User object used to be returned from REST endpoint on a request. Contains only
@@ -106,3 +133,21 @@ components:
         username:
           type: string
           description: User nickname
+        role:
+          $ref: '#/components/schemas/RoleDto'
+
+    RoleDto:
+      type: object
+      description: User role
+      required:
+        - name
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Role ID
+        name:
+          type: string
+          description: Name of the role
+
+
