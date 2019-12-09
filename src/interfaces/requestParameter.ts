@@ -1,3 +1,5 @@
+import {getSchemaNameFromResponse} from "../utils";
+
 export default class RequestParameter {
     private _name: string;
     private _required: boolean;
@@ -18,6 +20,11 @@ export default class RequestParameter {
             case 'integer':
                 this._type = 'number';
                 break;
+            case undefined:
+                if (data['$ref']) {
+                    this._type = getSchemaNameFromResponse(data['$ref']);
+                    break;
+                }
             default:
                 this._type = data.schema.type;
                 break;

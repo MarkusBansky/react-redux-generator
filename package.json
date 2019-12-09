@@ -35,6 +35,7 @@
   ],
   "dependencies": {
     "chalk": "^3.0.0",
+    "commander": "^4.0.1",
     "ejs": "^2.7.2",
     "listr": "^0.14.3",
     "lodash": "^4.17.15",
